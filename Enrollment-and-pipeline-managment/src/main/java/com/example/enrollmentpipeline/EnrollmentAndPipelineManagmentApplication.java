@@ -1,4 +1,4 @@
-package com.enrollmentpipeline.demo;
+package com.example.enrollmentpipeline;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
