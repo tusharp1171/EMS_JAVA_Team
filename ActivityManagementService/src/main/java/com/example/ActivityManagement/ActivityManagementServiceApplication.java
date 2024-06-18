@@ -10,6 +10,7 @@ public class ActivityManagementServiceApplication {
 		SpringApplication.run(ActivityManagementServiceApplication.class, args);
 		
 		
+		
 	}
 
 }
