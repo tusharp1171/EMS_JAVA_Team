@@ -8,6 +8,8 @@ public class AdmissionsFeeServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdmissionsFeeServiceApplication.class, args);
+		
+		
 	}
 
 }
