@@ -22,11 +22,11 @@ public class SyllabusController {
     @Autowired
     private SyllabusService syllabusService;
 
-    @GetMapping
-    public ResponseEntity<List<Syllabus>> getAllSyllabuses() {
-        List<Syllabus> syllabuses = syllabusService.getAllSyllabi();
-        return new ResponseEntity<>(syllabuses, HttpStatus.OK);
-    }
+	    @GetMapping
+	    public ResponseEntity<List<Syllabus>> getAllSyllabuses() {
+	        List<Syllabus> syllabuses = syllabusService.getAllSyllabi();
+	        return new ResponseEntity<>(syllabuses, HttpStatus.OK);
+	    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSyllabusById(@PathVariable Integer id) {
