@@ -10,6 +10,7 @@ public class CourseManagementServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CourseManagementServiceApplication.class, args);
 		
+		
 	}
 
 }
