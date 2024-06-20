@@ -21,8 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -48,8 +47,65 @@ public class Enquiries {
     
     @ManyToOne (fetch=FetchType.LAZY)
     @JoinColumn(name = "pipeLinePhaseId",nullable = false)
-    private PipeLinePhases pipeLinePhases ; 
+    private PipeLinePhases pipeLinePhases ;
+
+	public Integer getEnquiryId() {
+		return enquiryId;
+	}
+
+	public void setEnquiryId(Integer enquiryId) {
+		this.enquiryId = enquiryId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobileNo() {
+		return mobileNo;
+	}
+
+	public void setMobileNo(String mobileNo) {
+		this.mobileNo = mobileNo;
+	}
+
+	public String getEnquirySource() {
+		return enquirySource;
+	}
+
+	public void setEnquirySource(String enquirySource) {
+		this.enquirySource = enquirySource;
+	}
+
+	public Courses getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Courses courses) {
+		this.courses = courses;
+	}
+
+	public PipeLinePhases getPipeLinePhases() {
+		return pipeLinePhases;
+	}
+
+	public void setPipeLinePhases(PipeLinePhases pipeLinePhases) {
+		this.pipeLinePhases = pipeLinePhases;
+	} 
     
     
     //private int salesPersonId;
+    
 }

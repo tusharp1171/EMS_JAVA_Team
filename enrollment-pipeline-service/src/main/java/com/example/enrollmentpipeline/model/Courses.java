@@ -12,8 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,4 +30,35 @@ public class Courses {
     @NotNull(message = "courseFees is mandatory")
     private int courseDuration; 
 //    private int courseTypeId; 
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getCourseName() {
+		return courseName;
+	}
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public double getCourseFees() {
+		return courseFees;
+	}
+	public void setCourseFees(double courseFees) {
+		this.courseFees = courseFees;
+	}
+	public int getCourseDuration() {
+		return courseDuration;
+	}
+	public void setCourseDuration(int courseDuration) {
+		this.courseDuration = courseDuration;
+	}
+    
 }  

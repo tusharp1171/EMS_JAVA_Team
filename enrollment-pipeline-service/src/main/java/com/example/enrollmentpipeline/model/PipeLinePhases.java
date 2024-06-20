@@ -1,5 +1,5 @@
 package com.example.enrollmentpipeline.model;
-
+//helo tudshsrs 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,5 +23,18 @@ public class PipeLinePhases {
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)           
      private Integer pipeLinePhaseId ; 
      @NotNull(message = "phaseName is mandatory")
-     private String phaseName; 
+     private String phaseName;
+	public Integer getPipeLinePhaseId() {
+		return pipeLinePhaseId;
+	}
+	public void setPipeLinePhaseId(Integer pipeLinePhaseId) {
+		this.pipeLinePhaseId = pipeLinePhaseId;
+	}
+	public String getPhaseName() {
+		return phaseName;
+	}
+	public void setPhaseName(String phaseName) {
+		this.phaseName = phaseName;
+	} 
+
 }
