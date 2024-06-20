@@ -11,6 +11,8 @@ public class CourseManagementServiceApplication {
 		SpringApplication.run(CourseManagementServiceApplication.class, args);
 		
 		
+		
+		
 	}
 
 }
