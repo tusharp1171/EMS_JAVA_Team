@@ -3,5 +3,5 @@ package com.example.facultytimetable.service;
 
 public interface WeekService {
 
-	void getWeeksData();
+	void findWeekData(String weekDayName);
 }
