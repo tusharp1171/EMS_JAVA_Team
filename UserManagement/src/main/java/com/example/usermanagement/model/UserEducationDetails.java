@@ -15,9 +15,13 @@ public class UserEducationDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@ManyToOne
-	@JoinColumn(name = "userId", referencedColumnName = "id")
-	private Users users;
+//	@ManyToOne
+//	@JoinColumn(name = "userId", referencedColumnName = "id")
+//	private Users users;
+	
+
+	private Long userId;
+	
 	private String educationTitle;
 	private String description;
 	private Integer passingYear;

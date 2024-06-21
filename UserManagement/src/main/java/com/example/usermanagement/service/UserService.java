@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 
 public interface UserService {
 
-	Users addUsers(@Valid Users users, int id);
+	Users addUsers(@Valid Users users);
 
 	
 
