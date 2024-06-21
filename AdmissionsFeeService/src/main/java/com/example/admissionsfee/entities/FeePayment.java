@@ -1,9 +1,6 @@
 package com.example.admissionsfee.entities;
 
-import java.time.LocalDateTime;
 import java.util.Date;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,8 +24,6 @@ public class FeePayment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long admissionId;
-
     private double amountCredited;
 
     private double balanceAmount;
@@ -40,5 +35,10 @@ public class FeePayment {
 
     @Temporal(TemporalType.DATE)
     private Date nextDueDate;
+    
+ // Many-to-one relationship to Admission
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admission_id", nullable = false)
+    private Admission admission;
 
 }

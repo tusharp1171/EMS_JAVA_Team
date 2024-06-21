@@ -1,5 +1,4 @@
 package com.example.admissionsfee.serviceImpl;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.admissionsfee.dto.FeePaymentDTO;
+import com.example.admissionsfee.entities.Admission;
 import com.example.admissionsfee.entities.FeePayment;
 import com.example.admissionsfee.exception.ResourceNotFoundException;
+import com.example.admissionsfee.repo.AdmissionRepository;
 import com.example.admissionsfee.repo.FeePaymentRepository;
 import com.example.admissionsfee.service.FeePaymentService;
 
@@ -18,31 +19,33 @@ public class FeePaymentServiceImpl implements FeePaymentService {
     @Autowired
     private FeePaymentRepository feePaymentRepository;
 
+    @Autowired
+    private AdmissionRepository admissionRepository;
+
     @Override
     public List<FeePaymentDTO> getAllFeePayments() {
         return feePaymentRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
-
+    
     @Override
     public FeePaymentDTO getFeePaymentById(Long id) {
         FeePayment feePayment = feePaymentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Fee payment not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("FeePayment not found with id: " + id));
         return convertToDTO(feePayment);
     }
 
     @Override
     public FeePaymentDTO createFeePayment(FeePaymentDTO feePaymentDTO) {
         FeePayment feePayment = convertToEntity(feePaymentDTO);
-        FeePayment savedFeePayment = feePaymentRepository.save(feePayment);
-        return convertToDTO(savedFeePayment);
+        feePayment = feePaymentRepository.save(feePayment);
+        return convertToDTO(feePayment);
     }
-
+    
     @Override
     public FeePaymentDTO updateFeePayment(Long id, FeePaymentDTO feePaymentDTO) {
         FeePayment feePayment = feePaymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Fee payment not found with id: " + id));
 
-        feePayment.setAdmissionId(feePaymentDTO.getAdmissionId());
         feePayment.setAmountCredited(feePaymentDTO.getAmountCredited());
         feePayment.setBalanceAmount(feePaymentDTO.getBalanceAmount());
         feePayment.setPaymentDate(feePaymentDTO.getPaymentDate());
@@ -62,26 +65,31 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         }
     }
 
-    private FeePaymentDTO convertToDTO(FeePayment feePayment) {
-        FeePaymentDTO feePaymentDTO = new FeePaymentDTO();
-        feePaymentDTO.setId(feePayment.getId());
-        feePaymentDTO.setAdmissionId(feePayment.getAdmissionId());
-        feePaymentDTO.setAmountCredited(feePayment.getAmountCredited());
-        feePaymentDTO.setBalanceAmount(feePayment.getBalanceAmount());
-        feePaymentDTO.setPaymentDate(feePayment.getPaymentDate());
-        feePaymentDTO.setPaymentMethod(feePayment.getPaymentMethod());
-        feePaymentDTO.setNextDueDate(feePayment.getNextDueDate());
-        return feePaymentDTO;
+    @Override
+    public FeePaymentDTO convertToDTO(FeePayment feePayment) {
+        FeePaymentDTO dto = new FeePaymentDTO();
+        dto.setId(feePayment.getId());
+        dto.setAmountCredited(feePayment.getAmountCredited());
+        dto.setBalanceAmount(feePayment.getBalanceAmount());
+        dto.setPaymentDate(feePayment.getPaymentDate());
+        dto.setPaymentMethod(feePayment.getPaymentMethod());
+        dto.setNextDueDate(feePayment.getNextDueDate());
+        dto.setAdmissionId(feePayment.getAdmission().getId());
+        return dto;
     }
 
-    private FeePayment convertToEntity(FeePaymentDTO feePaymentDTO) {
+    private FeePayment convertToEntity(FeePaymentDTO dto) {
         FeePayment feePayment = new FeePayment();
-        feePayment.setAdmissionId(feePaymentDTO.getAdmissionId());
-        feePayment.setAmountCredited(feePaymentDTO.getAmountCredited());
-        feePayment.setBalanceAmount(feePaymentDTO.getBalanceAmount());
-        feePayment.setPaymentDate(feePaymentDTO.getPaymentDate());
-        feePayment.setPaymentMethod(feePaymentDTO.getPaymentMethod());
-        feePayment.setNextDueDate(feePaymentDTO.getNextDueDate());
+        feePayment.setId(dto.getId());
+        feePayment.setAmountCredited(dto.getAmountCredited());
+        feePayment.setBalanceAmount(dto.getBalanceAmount());
+        feePayment.setPaymentDate(dto.getPaymentDate());
+        feePayment.setPaymentMethod(dto.getPaymentMethod());
+        feePayment.setNextDueDate(dto.getNextDueDate());
+
+        Admission admission = admissionRepository.findById(dto.getAdmissionId())
+                .orElseThrow(() -> new RuntimeException("Admission not found"));
+        feePayment.setAdmission(admission);
         return feePayment;
     }
 }

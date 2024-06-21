@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeePaymentDTO {
-	 private Long id;
-	    private Long admissionId;
-	    private double amountCredited;
-	    private double balanceAmount;
-	    private Date paymentDate;
-	    private String paymentMethod;
-	    private Date nextDueDate;
-    
+	private Long id;
+	private double amountCredited;
+	private double balanceAmount;
+	private Date paymentDate;
+	private String paymentMethod;
+	private Date nextDueDate;
+
+	private Long admissionId;
+
 }
