@@ -45,6 +45,12 @@
         <artifactId>springfox-swagger2</artifactId>
         <version>3.0.0</version> <!-- Use the latest version -->
     </dependency>
+    <dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>4.0.1</version> <!-- Adjust version as necessary -->
+    <scope>provided</scope> <!-- This scope is typical for servlet APIs -->
+</dependency>
 <dependency>
     <groupId>mysql</groupId>
     <artifactId>mysql-connector-java</artifactId>

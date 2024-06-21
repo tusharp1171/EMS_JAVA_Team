@@ -12,7 +12,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
+import com.example.enrollmentpipeline.customexception.EntityNotFoundException;
 import com.example.enrollmentpipeline.customexception.ErrorDetails;
 
 import jakarta.validation.ConstraintViolation;
@@ -20,6 +22,12 @@ import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleUserCredentialsNotFoundException(EntityNotFoundException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), null);
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDetails> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
