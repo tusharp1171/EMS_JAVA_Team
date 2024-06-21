@@ -8,8 +8,10 @@ import jakarta.validation.Valid;
 
 public interface UserAdressesService {
 
-	UserAdresses addUserAdresses(UserAdresses userAdresses, int id);
+	
+	UserAdresses createUserAdresses(@Valid UserAdresses useradd);
 
-	List<UserAdresses> getAlluserAdresses();
+	List<UserAdresses> getAllAdresses();
 
+	
 }

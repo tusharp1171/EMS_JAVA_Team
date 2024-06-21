@@ -7,33 +7,23 @@ import org.springframework.stereotype.Service;
 
 import com.example.usermanagement.model.UserAdresses;
 import com.example.usermanagement.repository.UserAdressesRepository;
-import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.UserAdressesService;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-
-
 @Service
-public class UserAdressesServiceImpl implements UserAdressesService{
-	
-	@Autowired
-	UserAdressesRepository adressesRepository;
-	
-	@Autowired
-	UserRepository userRepository;
+public class UserAdressesServiceImpl implements UserAdressesService {
 
+	@Autowired
+	UserAdressesRepository userAdressesRepository;
 	@Override
-	public UserAdresses addUserAdresses( UserAdresses userAdresses ,int id) {
-		userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("UserAdresses not found for ID: " + id));
+	public UserAdresses createUserAdresses(@Valid UserAdresses useradd) {
 		
-		return adressesRepository.save(userAdresses) ;
+		return userAdressesRepository.save(useradd);
 	}
-
 	@Override
-	public List<UserAdresses> getAlluserAdresses() {
-		return adressesRepository.findAll();
-		
+	public List<UserAdresses> getAllAdresses() {
+		// TODO Auto-generated method stub
+		return userAdressesRepository.findAll();
 	}
 
 }
