@@ -1,11 +1,16 @@
 package com.sn.login.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertFalse.List;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.sn.login.dto.UserAddressDto;
+import com.sn.login.dto.UserEducationDetails;
+
 
 @Entity
 @Table(name = "users",
@@ -31,6 +36,14 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    @Size(max = 10)
+    private String mobile;
+    @Transient
+    private UserEducationDetails userEducationDetails;
+    @Transient
+    private UserAddressDto userAddressDto;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -40,12 +53,16 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String mobile,UserEducationDetails userEducationDetails,UserAddressDto userAddressDto) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.mobile=mobile;
+        this.userAddressDto=userAddressDto;
+        this.userEducationDetails=userEducationDetails;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -76,6 +93,30 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public UserEducationDetails getUserEducationDetails() {
+        return userEducationDetails;
+    }
+
+    public void setUserEducationDetails(UserEducationDetails userEducationDetails) {
+        this.userEducationDetails = userEducationDetails;
+    }
+
+    public UserAddressDto getUserAddressDto() {
+        return userAddressDto;
+    }
+
+    public void setUserAddressDto(UserAddressDto userAddressDto) {
+        this.userAddressDto = userAddressDto;
     }
 
     public Set<Role> getRoles() {

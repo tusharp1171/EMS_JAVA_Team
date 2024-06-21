@@ -1,9 +1,16 @@
 package com.sn.login.paylods.request;
+
+import com.sn.login.dto.UserAddressDto;
+import com.sn.login.dto.UserEducationDetails;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.util.Set;
 
-import jakarta.validation.constraints.*;
-
 public class SignupRequest {
+
     @NotBlank
     @Size(min = 3, max = 20)
     private String username;
@@ -18,6 +25,15 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    @NotBlank
+    private String mobile;
+
+    private UserEducationDetails userEducationDetails;
+
+    private UserAddressDto userAddressDto;
+
+    // Getters and Setters
 
     public String getUsername() {
         return username;
@@ -35,6 +51,14 @@ public class SignupRequest {
         this.email = email;
     }
 
+    public Set<String> getRole() {
+        return role;
+    }
+
+    public void setRole(Set<String> role) {
+        this.role = role;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -43,11 +67,27 @@ public class SignupRequest {
         this.password = password;
     }
 
-    public Set<String> getRole() {
-        return this.role;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setRole(Set<String> role) {
-        this.role = role;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public UserEducationDetails getUserEducationDetails() {
+        return userEducationDetails;
+    }
+
+    public void setUserEducationDetails(UserEducationDetails userEducationDetails) {
+        this.userEducationDetails = userEducationDetails;
+    }
+
+    public UserAddressDto getUserAddressDto() {
+        return userAddressDto;
+    }
+
+    public void setUserAddressDto(UserAddressDto userAddressDto) {
+        this.userAddressDto = userAddressDto;
     }
 }
