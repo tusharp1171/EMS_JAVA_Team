@@ -6,4 +6,6 @@ import com.example.ActivityManagement.model.ActivityStatus;
 
 public interface ActivityStatusRepository extends JpaRepository<ActivityStatus, Integer> {
 
+	ActivityStatus save(String statusName);
+
 }

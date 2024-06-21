@@ -6,13 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.ActivityManagement.model.ActivityStatus;
 
+import jakarta.validation.Valid;
+
 
 public interface ActivityStatusService {
 	
 	List<ActivityStatus> getAllActivityStatuses();
     ActivityStatus getActivityStatusById(Integer id);
-    ActivityStatus saveActivityStatus(ActivityStatus activityStatus);
     void deleteActivityStatus(Integer id);
 	ActivityStatus updateActivityStatus(int id, ActivityStatus actStat);
+	ActivityStatus saveActivityStatus(@Valid ActivityStatus actStatus);
 
 }
