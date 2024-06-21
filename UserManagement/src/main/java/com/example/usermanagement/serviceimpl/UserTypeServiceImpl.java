@@ -15,11 +15,11 @@ public class UserTypeServiceImpl implements UserTypeService{
 	@Autowired
 	UserTypeRepo userTypeRepo;
 
-	@Override
-	public UserType addUserType( UserType userType) {
-		
-		return userTypeRepo.save(userType);
-	}
-	
+//	@Override
+//	public UserType addUserType( UserType userType) {
+//		
+//		return userTypeRepo.save(userType);
+//	}
+//	
 	
 }

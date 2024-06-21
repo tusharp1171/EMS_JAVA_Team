@@ -8,8 +8,14 @@ import jakarta.validation.Valid;
 
 public interface UserAdressesService {
 
-	UserAdresses addUserAdresses(UserAdresses userAdresses, int id);
+	UserAdresses addUserAdresses(UserAdresses userAdresses);
 
 	List<UserAdresses> getAlluserAdresses();
+
+
+	
+	void deleteUserAdressesByUserId(Long userId);
+
+	
 
 }

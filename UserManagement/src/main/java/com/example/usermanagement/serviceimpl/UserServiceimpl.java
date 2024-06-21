@@ -12,22 +12,34 @@ import com.example.usermanagement.repository.UserTypeRepo;
 import com.example.usermanagement.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
 public class UserServiceimpl implements UserService {
-	@Autowired
-	UserRepository userRepository;
-	
-	@Autowired
-	
-	UserTypeRepo userTypeRepo;
+	 @Autowired
+	    private UserRepository userRepository;
 
-	@Override
-	public Users addUsers(Users users, int id) {
-		  userTypeRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("UserType not found for ID: " + id));
-		    
-		    return userRepository.save(users);
+	    @Autowired
+	    private UserTypeRepo userTypeRepo;
+
+	    @Override
+	    @Transactional
+	    public Users addUsers(@Valid Users users) {
+	   
+
+//	        // Ensure bidirectional relationships are maintained
+//	        if (users.getUserAdresses() != null) {
+//	            users.getUserAdresses().forEach(address -> address.setUsers(users));
+//	        }
+//	        if (users.getUserCredentials() != null) {
+//	            users.getUserCredentials().forEach(credential -> credential.setUsers(users));
+//	        }
+//	        if (users.getUserEducationDetails() != null) {
+//	            users.getUserEducationDetails().forEach(educationDetail -> educationDetail.setUsers(users));
+//	        }
+
+	        // Save the Users entity and its related entities
+	        return userRepository.save(users);
+	    }
 	}
-
-}

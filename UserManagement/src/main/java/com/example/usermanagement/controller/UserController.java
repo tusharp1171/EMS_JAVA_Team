@@ -16,7 +16,7 @@ import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
 @RestController
-@RequestMapping("Users")
+@RequestMapping("users")
 public class UserController {
 
 	@Autowired
@@ -24,8 +24,8 @@ public class UserController {
 	UserService userService;
 	
 	@PostMapping("/add")
-    public ResponseEntity<Users> addUsers(@Valid @RequestBody Users users, @PathVariable int id) {
-		Users users2=userService.addUsers(users,id);
+    public ResponseEntity<Users> addUsers(@Valid @RequestBody Users users) {
+		Users users2=userService.addUsers(users);
 		return new  ResponseEntity<Users> (users2,HttpStatus.CREATED) ;
 		
 	}

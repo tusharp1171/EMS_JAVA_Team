@@ -27,21 +27,21 @@ public class UserTypeController {
     @Autowired
     private UserTypeService userTypeService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addUserType(@Valid @RequestBody UserType userType, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                String fieldName = error.getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            }
-            ErrorDetails errorDetails = new ErrorDetails("Validation failed", LocalDateTime.now(), errors);
-            return ResponseEntity.badRequest().body(errorDetails);
-        }
-
-        UserType savedUserType = userTypeService.addUserType(userType);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserType);
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity<?> addUserType(@Valid @RequestBody UserType userType, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            for (FieldError error : bindingResult.getFieldErrors()) {
+//                String fieldName = error.getField();
+//                String errorMessage = error.getDefaultMessage();
+//                errors.put(fieldName, errorMessage);
+//            }
+//            ErrorDetails errorDetails = new ErrorDetails("Validation failed", LocalDateTime.now(), errors);
+//            return ResponseEntity.badRequest().body(errorDetails);
+//        }
+//
+//        UserType savedUserType = userTypeService.addUserType(userType);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserType);
+//    }
 
 }
