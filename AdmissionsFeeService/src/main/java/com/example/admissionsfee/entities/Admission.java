@@ -1,11 +1,15 @@
 package com.example.admissionsfee.entities;
 
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -30,5 +34,9 @@ public class Admission {
     private String description;
 
     private String status;
+    
+    // One-to-many relationship to FeePayment
+    @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeePayment> feePayments;
 
 }

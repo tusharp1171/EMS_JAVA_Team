@@ -1,5 +1,4 @@
 package com.example.admissionsfee.serviceImpl;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,12 +10,15 @@ import com.example.admissionsfee.entities.Admission;
 import com.example.admissionsfee.exception.ResourceNotFoundException;
 import com.example.admissionsfee.repo.AdmissionRepository;
 import com.example.admissionsfee.service.AdmissionService;
+import com.example.admissionsfee.service.FeePaymentService;
 
 @Service
 public class AdmissionServiceImpl implements AdmissionService {
 
     @Autowired
     private AdmissionRepository admissionRepository;
+    @Autowired
+    private FeePaymentService feePaymentService;
 
     @Override
     public List<AdmissionDTO> getAllAdmissions() {
@@ -61,21 +63,25 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     private AdmissionDTO convertToDTO(Admission admission) {
-        AdmissionDTO admissionDTO = new AdmissionDTO();
-        admissionDTO.setId(admission.getId());
-        admissionDTO.setEnquiryId(admission.getEnquiryId());
-        admissionDTO.setAdmissionDate(admission.getAdmissionDate());
-        admissionDTO.setDescription(admission.getDescription());
-        admissionDTO.setStatus(admission.getStatus());
-        return admissionDTO;
+        AdmissionDTO dto = new AdmissionDTO();
+        dto.setId(admission.getId());
+        dto.setEnquiryId(admission.getEnquiryId());
+        dto.setAdmissionDate(admission.getAdmissionDate());
+        dto.setDescription(admission.getDescription());
+        dto.setStatus(admission.getStatus());
+        dto.setFeePayments(admission.getFeePayments().stream()
+                         .map(feePaymentService::convertToDTO)
+                         .collect(Collectors.toList()));
+        return dto;
     }
 
-    private Admission convertToEntity(AdmissionDTO admissionDTO) {
+    private Admission convertToEntity(AdmissionDTO dto) {
         Admission admission = new Admission();
-        admission.setEnquiryId(admissionDTO.getEnquiryId());
-        admission.setAdmissionDate(admissionDTO.getAdmissionDate());
-        admission.setDescription(admissionDTO.getDescription());
-        admission.setStatus(admissionDTO.getStatus());
+        admission.setId(dto.getId());
+        admission.setEnquiryId(dto.getEnquiryId());
+        admission.setAdmissionDate(dto.getAdmissionDate());
+        admission.setDescription(dto.getDescription());
+        admission.setStatus(dto.getStatus());
         return admission;
     }
 }
