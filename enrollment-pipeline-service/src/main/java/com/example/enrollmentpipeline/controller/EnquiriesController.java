@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.example.enrollmentpipeline.customexception.EntityNotFoundException;
 import com.example.enrollmentpipeline.customexception.ErrorDetails;
 import com.example.enrollmentpipeline.model.Courses;
 import com.example.enrollmentpipeline.model.Enquiries;
@@ -32,6 +35,14 @@ import jakarta.websocket.server.PathParam;
 public class EnquiriesController {
 	@Autowired
 	private EnquiriesService enquiriesService;
+	
+	
+	private final RestTemplate restTemplate;
+
+    @Autowired
+    public EnquiriesController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
 	 @PostMapping("/add/{cid}/{pid}")
 	    public ResponseEntity<?> createEnquiry(@RequestBody Enquiries enquiry,
@@ -55,7 +66,7 @@ public class EnquiriesController {
 	
 	@GetMapping("/{id}")
 	public Enquiries getEnquiryById(@PathVariable int id) {
-		return enquiriesService.getEnquiryById(id);
+		        return enquiriesService.getEnquiryById(id) ;	
 	}
 
 	@GetMapping
@@ -72,4 +83,13 @@ public class EnquiriesController {
 	public void deleteEnquiry(@PathVariable int id) {
 		enquiriesService.deleteEnquiry(id);
 	}
+	
+
+    @GetMapping("/user")
+    public int getUserId() {
+         String response = restTemplate.getForObject("https://localhost:8081/Users", String.class);
+         int userId=Integer.parseInt(response);
+         return userId;
+        
+    }
 }
