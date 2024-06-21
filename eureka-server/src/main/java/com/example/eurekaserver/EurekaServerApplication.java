@@ -1,5 +1,5 @@
 package com.example.eurekaserver;
-
+//ravinda
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
