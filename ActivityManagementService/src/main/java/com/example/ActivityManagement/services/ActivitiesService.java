@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 import com.example.ActivityManagement.dto.ActivitiesDto;
 import com.example.ActivityManagement.model.Activities;
 
+import jakarta.validation.Valid;
+
 
 public interface ActivitiesService {
 
 	List<Activities> getAllActivities();
     Activities getActivityById(Integer id);
-    Activities saveActivity(Activities activities);
-    Activities deleteActivity(Integer id);
+    Activities saveActivity(@Valid Activities activities);
+    void deleteActivity(Integer id);
 	Activities updateActivity(int id, Activities act);
+	
 
 
 	

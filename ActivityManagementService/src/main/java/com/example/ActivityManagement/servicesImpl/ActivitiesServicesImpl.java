@@ -6,8 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.ActivityManagement.CustomException.EntityNotFoundException;
 import com.example.ActivityManagement.model.Activities;
+import com.example.ActivityManagement.model.ActivityStatus;
+import com.example.ActivityManagement.model.ActivityType;
 import com.example.ActivityManagement.repository.ActivitiesRepo;
+import com.example.ActivityManagement.repository.ActivityStatusRepository;
+import com.example.ActivityManagement.repository.ActivityTypeRepository;
 import com.example.ActivityManagement.services.ActivitiesService;
 
 @Service
@@ -16,70 +21,56 @@ public class ActivitiesServicesImpl implements ActivitiesService {
 
 	@Autowired
 	ActivitiesRepo repo;
+	
+	@Autowired
+	ActivityStatusRepository activityStatusRepository;
+	
+	@Autowired
+	ActivityTypeRepository activityTypeRepository;
 
 	@Override
     public List<Activities> getAllActivities() {
-		List<Activities > list = this.repo.findAll();
-        return list;
+        return repo.findAll();
     }
 
     @Override
     public Activities getActivityById(Integer id) {
-//        return repo.findById(id).orElse(null);
-    	
-//    	Activities act = this.repo.getById(id);
-//    	return act;
-    	
-    	Optional<Activities> act = this.repo.findById(id);
-    	if(act.isPresent()) {
-    		return this.repo.getById(id);
-    	}
-    	return null;
-    	
-    	
+    	return repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Course type not found with id: " + id));	
     }
 
     @Override
     public Activities saveActivity(Activities activity) {
-//        return repo.save(activity);
-    	
-    	Activities actSave = this.repo.save(activity);
-    	
-    	return actSave;
+//    	 ActivityStatus createStat = new ActivityStatus();
+//    	 createStat.setStatusName(activity.getActivityStatus().getStatusName());
+//    	 activityStatusRepository.save(createStat);
+//    	 
+//    	 ActivityType createType = new ActivityType();
+//    	 createType .setTypeName(activity.getActivityType().getTypeName());
+//    	 activityTypeRepository.save(createType);
+    	 
+    	return repo.save(activity);
     }
 
     
-    @Override
-    public Activities deleteActivity(Integer id) {
-    	Optional<Activities> activity = this.repo.findById(id);
-    	
-    	if(activity.isPresent()) {
-    		repo.deleteById(id);
-    	}
-    	return null;
-    }
 
 	@Override
 	public Activities updateActivity(int id, Activities act) {
 		
-		Optional<Activities> activity = this.repo.findById(id);
+		  Activities activity= repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Course type not found with id: " + id));
+
+	        activity.setActivityStatus(act.getActivityStatus());
+	        activity.setActivityType(act.getActivityType());
+	        activity.setDueDate(act.getDueDate());
+	        activity.setSalesRepresentativeId(act.getSalesRepresentativeId());
+	        act.setSummary(act.getSummary());
+
+	        return repo.save(activity);
 		
-		if(activity.isPresent()) {
-			
-			Activities act2 = activity.get();
-			
-			act2.setActivityStatus(act.getActivityStatus());
-			act2.setActivityType(act.getActivityType());
-			act2.setDueDate(act.getDueDate());
-			act2.setSalesRepresentativeId(act.getSalesRepresentativeId());
-			act2.setSummary(act.getSummary());
-			
-			return repo.save(act2);
-			
-		}
-		
-		
-		return null;
+	}
+
+	@Override
+	public void deleteActivity(Integer id) {
+		repo.deleteById(id);
 	}
 
 	
