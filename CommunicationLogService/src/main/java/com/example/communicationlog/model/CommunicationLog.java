@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table
-public class CommunicationlLog {
+public class CommunicationLog {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
