@@ -4,8 +4,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.admissionsfee.dto.AdmissionDTO;
+import com.example.admissionsfee.dto.EnquiryDTO;
 import com.example.admissionsfee.entities.Admission;
 import com.example.admissionsfee.exception.ResourceNotFoundException;
 import com.example.admissionsfee.repo.AdmissionRepository;
@@ -19,7 +21,14 @@ public class AdmissionServiceImpl implements AdmissionService {
     private AdmissionRepository admissionRepository;
     @Autowired
     private FeePaymentService feePaymentService;
+    @Autowired
+    private RestTemplate restTemplate;
 
+    private EnquiryDTO getEnquiryById(Long enquiryId) {
+        String url = "http://enrollment-service/enquiries/" + enquiryId;
+        return restTemplate.getForObject(url, EnquiryDTO.class);
+    }    
+    
     @Override
     public List<AdmissionDTO> getAllAdmissions() {
         return admissionRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
