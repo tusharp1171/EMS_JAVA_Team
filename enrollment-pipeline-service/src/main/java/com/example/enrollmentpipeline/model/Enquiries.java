@@ -130,6 +130,18 @@ public class Enquiries {
 	} 
     
     
-    private int salesPersonId;
+    private long salesPersonId;
+
+
+
+	public long getSalesPersonId() {
+		return salesPersonId;
+	}
+
+
+	public void setSalesPersonId(long salesPersonId) {
+		this.salesPersonId = salesPersonId;
+	}
+    
     
 }

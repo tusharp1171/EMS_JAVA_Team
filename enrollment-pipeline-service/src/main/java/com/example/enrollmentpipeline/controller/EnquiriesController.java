@@ -35,15 +35,12 @@ import jakarta.websocket.server.PathParam;
 public class EnquiriesController {
 	@Autowired
 	private EnquiriesService enquiriesService;
+	// @Autowired
+	//	private  RestTemplate restTemplate;
+
 	
 	
-	private final RestTemplate restTemplate;
-
-    @Autowired
-    public EnquiriesController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
+   
 	 @PostMapping("/add/{cid}/{pid}")
 	    public ResponseEntity<?> createEnquiry(@RequestBody Enquiries enquiry,
 	                                           @PathVariable("cid") int id,
@@ -56,11 +53,14 @@ public class EnquiriesController {
 	                String errorMessage = error.getDefaultMessage();
 	                errors.put(fieldName, errorMessage);
 	            }
-	            ErrorDetails errorDetails = new ErrorDetails("Validation Failed", LocalDateTime.now(), errors);
+	            ErrorDetails errorDetails = new ErrorDetails("Validation Failed", LocalDateTime.now(), errors,HttpStatus.BAD_REQUEST.value());
 	            return ResponseEntity.badRequest().body(errorDetails);
 	        }
 
 	        Enquiries savedEnquiry = enquiriesService.saveEnquiry(enquiry, id, pipeLinePhaseId);
+	     //   long response = restTemplate.getForObject("http://192.168.1.113:8080/api/test/tokenusername", long.class);
+	        
+          
 	        return ResponseEntity.ok(savedEnquiry);
 	    }
 	
@@ -85,11 +85,5 @@ public class EnquiriesController {
 	}
 	
 
-    @GetMapping("/user")
-    public int getUserId() {
-         String response = restTemplate.getForObject("https://localhost:8081/Users", String.class);
-         int userId=Integer.parseInt(response);
-         return userId;
-        
-    }
+ 
 }
