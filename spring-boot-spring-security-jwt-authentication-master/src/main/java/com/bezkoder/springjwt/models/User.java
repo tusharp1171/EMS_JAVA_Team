@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.models;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.bezkoder.springjwt.dto.UserAddressDto;
@@ -36,6 +37,7 @@ public class User {
   private String password;
   
   private String mobile;
+  
   @Transient
   private UserAddressDto addressDto;
   @Transient

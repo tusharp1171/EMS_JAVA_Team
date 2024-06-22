@@ -17,6 +17,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+  public static String usrenmaefortoken=null;
 
   @Value("${bezkoder.app.jwtSecret}")
   private String jwtSecret;
@@ -24,9 +25,11 @@ public class JwtUtils {
   @Value("${bezkoder.app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
+
   public String generateJwtToken(Authentication authentication) {
 
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    
 
     return Jwts.builder()
         .setSubject((userPrincipal.getUsername()))
@@ -41,10 +44,14 @@ public class JwtUtils {
   }
 
   public String getUserNameFromJwtToken(String token) {
+	 JwtUtils.usrenmaefortoken=Jwts.parserBuilder().setSigningKey(key()).build()
+             .parseClaimsJws(token).getBody().getSubject();
     return Jwts.parserBuilder().setSigningKey(key()).build()
                .parseClaimsJws(token).getBody().getSubject();
   }
 
+
+  
   public boolean validateJwtToken(String authToken) {
     try {
       Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
