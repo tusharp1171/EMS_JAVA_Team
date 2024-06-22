@@ -22,8 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 public class Enquiries {
 	@Id
@@ -41,21 +40,46 @@ public class Enquiries {
     @NotNull(message = "enquirySource is mandatory")
     private String enquirySource; 
     
-    @ManyToOne (fetch=FetchType.LAZY)
+    @ManyToOne (fetch=FetchType.EAGER)
     @JoinColumn(name = "courseId")
     private Courses courses ;
     
-    @ManyToOne (fetch=FetchType.LAZY)
+    @ManyToOne (fetch=FetchType.EAGER)
     @JoinColumn(name = "pipeLinePhaseId",nullable = false)
     private PipeLinePhases pipeLinePhases ;
+    
+    
+
+	public Enquiries(@NotNull(message = "name is mandatory") String name,
+			@NotNull(message = "email is mandatory") String email,
+			@NotNull(message = "mobileNo is mandatory") @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid mobile number") String mobileNo,
+			@NotNull(message = "enquirySource is mandatory") String enquirySource, Courses courses,
+			PipeLinePhases pipeLinePhases, int salesPersonId) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.mobileNo = mobileNo;
+		this.enquirySource = enquirySource;
+		this.courses = courses;
+		this.pipeLinePhases = pipeLinePhases;
+		this.salesPersonId = salesPersonId;
+	}
+	
+	
+	
+
+	public Enquiries() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public Integer getEnquiryId() {
 		return enquiryId;
 	}
 
-	public void setEnquiryId(Integer enquiryId) {
-		this.enquiryId = enquiryId;
-	}
+//	public void setEnquiryId(Integer enquiryId) {
+//		this.enquiryId = enquiryId;
+//	}
 
 	public String getName() {
 		return name;
@@ -106,6 +130,18 @@ public class Enquiries {
 	} 
     
     
-    //private int salesPersonId;
+    private long salesPersonId;
+
+
+
+	public long getSalesPersonId() {
+		return salesPersonId;
+	}
+
+
+	public void setSalesPersonId(long salesPersonId) {
+		this.salesPersonId = salesPersonId;
+	}
+    
     
 }

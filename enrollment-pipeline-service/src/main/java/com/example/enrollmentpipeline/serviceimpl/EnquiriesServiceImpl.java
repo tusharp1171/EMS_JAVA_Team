@@ -1,3 +1,4 @@
+
 package com.example.enrollmentpipeline.serviceimpl;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class EnquiriesServiceImpl implements EnquiriesService {
 	public Enquiries updateEnquiry(Enquiries enquiry, int id) {
 		Enquiries enquiry_temp = enquiriesRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Enquiry not found with id: " + id));
-		enquiry_temp.setEnquiryId(enquiry.getEnquiryId());
+		//enquiry_temp.setEnquiryId(enquiry.getEnquiryId());
 		enquiry_temp.setName(enquiry.getName());
 		enquiry_temp.setEmail(enquiry.getEmail());
 		enquiry_temp.setMobileNo(enquiry.getMobileNo());

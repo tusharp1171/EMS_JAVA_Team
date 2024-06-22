@@ -12,7 +12,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
+import com.example.enrollmentpipeline.customexception.EntityNotFoundException;
 import com.example.enrollmentpipeline.customexception.ErrorDetails;
 
 import jakarta.validation.ConstraintViolation;
@@ -20,6 +22,17 @@ import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleUserCredentialsNotFoundException(EntityNotFoundException ex) {
+		
+		ErrorDetails errorDetails = new ErrorDetails
+				(ex.getMessage(), 
+						LocalDateTime.now(), 
+						null,
+						HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDetails> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
@@ -30,7 +43,8 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        ErrorDetails errorDetails = new ErrorDetails("Validation Error", LocalDateTime.now(), errors);
+        ErrorDetails errorDetails = new ErrorDetails
+        		("Validation Error", LocalDateTime.now(), errors,HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
@@ -44,7 +58,7 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         }
 
-        ErrorDetails errorDetails = new ErrorDetails("Constraint Violation", LocalDateTime.now(), errors);
+        ErrorDetails errorDetails = new ErrorDetails("Constraint Violation", LocalDateTime.now(), errors,HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

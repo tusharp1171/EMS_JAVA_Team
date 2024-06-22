@@ -8,6 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -18,9 +20,13 @@ public class UserAdresses {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "userId", referencedColumnName = "id")
-	private Users users;
+//	@ManyToOne
+//	@JoinColumn(name = "userId", referencedColumnName = "id")
+//	private Users users;
+//	
+
+	private Long userId;
+	
 	@NotBlank(message = "Atleast one Address Compulsury")
 	private String addressLineOne;
 	

@@ -23,28 +23,27 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@NotBlank(message = " firstName is required")
-	@Size(min = 2)
-	private String firstName;
-	
-	@NotBlank(message = "lastName is required")
-	@Size(min = 2)
-	private String lastName;
-	private LocalDate dob;
-   
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "userTypeId", referencedColumnName = "id")
-	private UserType userType;
-
-	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<UserAdresses> userAdresses;
-
-	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<UserCredentials> userCredentials;
- 
-	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<UserEducationDetails> userEducationDetails;
-
-	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<UserRoleMapper> userRoleMapper;
+//	@NotBlank(message = " firstName is required")
+//	private int jwtAuthId;
+//	
+//	@NotBlank(message = " firstName is required")
+//	@Size(min = 2)
+//	private String firstName;
+//	
+//	@NotBlank(message = "lastName is required")
+//	@Size(min = 2)
+//	private String lastName;
+//	private LocalDate dob;
+//     
+//	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<UserAdresses> userAdresses;
+//
+//	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<UserCredentials> userCredentials;
+// 
+//	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<UserEducationDetails> userEducationDetails;
+//
+//	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<UserRoleMapper> userRoleMapper;
 }

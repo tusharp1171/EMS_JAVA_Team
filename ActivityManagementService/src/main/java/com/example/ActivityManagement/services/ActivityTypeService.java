@@ -11,8 +11,8 @@ public interface ActivityTypeService {
 	
 	List<ActivityType> getAllActivityTypes();
     ActivityType getActivityTypeById(Integer id);
-    ActivityType saveActivityType(ActivityType activityType);
     void deleteActivityType(Integer id);
 	ActivityType updateActivityType(int id, ActivityType activityType);
+	ActivityType saveActivityType(String typeName);
 
 }

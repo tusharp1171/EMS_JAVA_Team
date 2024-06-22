@@ -33,7 +33,7 @@ public class PipeLinePhasesController {
 	        return pipeLinePhasesService.getPhaseById(id);
 	    }
 
-	    @GetMapping("/")
+	    @GetMapping
 	    public List<PipeLinePhases> getAllPhases() {
 	        return pipeLinePhasesService.getAllPhases();
 	    }

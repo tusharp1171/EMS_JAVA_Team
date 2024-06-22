@@ -6,4 +6,6 @@ import com.example.ActivityManagement.model.ActivityType;
 
 public interface ActivityTypeRepository  extends JpaRepository<ActivityType, Integer>{
 
+	ActivityType save(String typeName);
+
 }

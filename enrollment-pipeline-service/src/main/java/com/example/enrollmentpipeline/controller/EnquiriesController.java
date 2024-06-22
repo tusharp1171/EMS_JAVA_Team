@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.example.enrollmentpipeline.customexception.EntityNotFoundException;
 import com.example.enrollmentpipeline.customexception.ErrorDetails;
 import com.example.enrollmentpipeline.model.Courses;
 import com.example.enrollmentpipeline.model.Enquiries;
@@ -32,7 +35,12 @@ import jakarta.websocket.server.PathParam;
 public class EnquiriesController {
 	@Autowired
 	private EnquiriesService enquiriesService;
+	// @Autowired
+	//	private  RestTemplate restTemplate;
 
+	
+	
+   
 	 @PostMapping("/add/{cid}/{pid}")
 	    public ResponseEntity<?> createEnquiry(@RequestBody Enquiries enquiry,
 	                                           @PathVariable("cid") int id,
@@ -45,17 +53,20 @@ public class EnquiriesController {
 	                String errorMessage = error.getDefaultMessage();
 	                errors.put(fieldName, errorMessage);
 	            }
-	            ErrorDetails errorDetails = new ErrorDetails("Validation Failed", LocalDateTime.now(), errors);
+	            ErrorDetails errorDetails = new ErrorDetails("Validation Failed", LocalDateTime.now(), errors,HttpStatus.BAD_REQUEST.value());
 	            return ResponseEntity.badRequest().body(errorDetails);
 	        }
 
 	        Enquiries savedEnquiry = enquiriesService.saveEnquiry(enquiry, id, pipeLinePhaseId);
+	     //   long response = restTemplate.getForObject("http://192.168.1.113:8080/api/test/tokenusername", long.class);
+	        
+          
 	        return ResponseEntity.ok(savedEnquiry);
 	    }
 	
 	@GetMapping("/{id}")
 	public Enquiries getEnquiryById(@PathVariable int id) {
-		return enquiriesService.getEnquiryById(id);
+		        return enquiriesService.getEnquiryById(id) ;	
 	}
 
 	@GetMapping
@@ -72,4 +83,7 @@ public class EnquiriesController {
 	public void deleteEnquiry(@PathVariable int id) {
 		enquiriesService.deleteEnquiry(id);
 	}
+	
+
+ 
 }

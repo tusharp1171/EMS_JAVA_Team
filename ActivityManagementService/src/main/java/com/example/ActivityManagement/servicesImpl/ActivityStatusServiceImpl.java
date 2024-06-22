@@ -10,6 +10,8 @@ import com.example.ActivityManagement.model.ActivityStatus;
 import com.example.ActivityManagement.repository.ActivityStatusRepository;
 import com.example.ActivityManagement.services.ActivityStatusService;
 
+import jakarta.validation.Valid;
+
 @Service
 public class ActivityStatusServiceImpl implements ActivityStatusService {
 
@@ -36,12 +38,10 @@ public class ActivityStatusServiceImpl implements ActivityStatusService {
     	}
     	return null;
     }
-
     @Override
-    public ActivityStatus saveActivityStatus(ActivityStatus activityStatus) {
-//    	return activityStatusRepository.save(activityStatus);
-    	
-    	ActivityStatus actStatusSave = this.activityStatRepo.save(activityStatus);
+	public ActivityStatus saveActivityStatus(@Valid ActivityStatus actStatus) {
+//  	return activityStatusRepository.save(activityStatus); 	
+    	ActivityStatus actStatusSave = this.activityStatRepo.save( actStatus);
     	return actStatusSave;
     	
     }
@@ -70,6 +70,10 @@ public class ActivityStatusServiceImpl implements ActivityStatusService {
 		}
 		return null;
 	}
+
+	
+		
+
     
     
 	

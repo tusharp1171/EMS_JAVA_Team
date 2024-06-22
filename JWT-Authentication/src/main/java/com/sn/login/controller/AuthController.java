@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.sn.login.SecurityConfig.jwt.JwtUtils;
+import com.sn.login.dto.UserAddressDto;
+import com.sn.login.dto.UserEducationDetails;
 import com.sn.login.entity.ERole;
 import com.sn.login.entity.Role;
 import com.sn.login.entity.User;
@@ -20,6 +22,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -45,6 +49,9 @@ public class AuthController {
 
     @Autowired
     RoleRepository roleRepository;
+    
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
     PasswordEncoder encoder;
@@ -75,56 +82,83 @@ public class AuthController {
                         roles));
     }
 
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        // Check if username is already taken
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
         }
 
+        // Check if email is already in use
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+        // Create new user account
+        User user = new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(encoder.encode(signUpRequest.getPassword())); // Encrypt password
+        user.setMobile(signUpRequest.getMobile()); // Set mobile number
 
+        // Assign roles based on provided role names
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
+        if (strRoles == null || strRoles.isEmpty()) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new RuntimeException("Error: Default user role not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Error: Admin role not found."));
                         roles.add(adminRole);
-
                         break;
                     case "mod":
                         Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Error: Moderator role not found."));
                         roles.add(modRole);
-
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                                .orElseThrow(() -> new RuntimeException("Error: Default user role not found."));
                         roles.add(userRole);
                 }
             });
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        userRepository.save(user); // Save user to database
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        // Optionally handle user education details
+        if (signUpRequest.getUserEducationDetails() != null) {
+            ResponseEntity<UserEducationDetails> educationResponse = restTemplate.postForEntity(
+                    "http://192.168.1.113:8081/userEducationDetails/add",
+                    signUpRequest.getUserEducationDetails(),
+                    UserEducationDetails.class);
+            // Handle education response if needed
+        }
+
+        // Optionally handle user address details
+        if (signUpRequest.getUserAddressDto() != null) {
+            ResponseEntity<UserAddressDto> addressResponse = restTemplate.postForEntity(
+                    "http://192.168.1.113:8081/userAddressDetails/add",
+                    signUpRequest.getUserAddressDto(),
+                    UserAddressDto.class);
+            // Handle address response if needed
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("User registered successfully!"));
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {

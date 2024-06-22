@@ -25,8 +25,8 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
 	@Autowired
 	UserTypeRepo userTypeRepo;
 
-	@Override
-	public UserCredentials addUserCredentials(UserCredentials userCredentials) {
+//	@Override
+//	public UserCredentials addUserCredentials(UserCredentials userCredentials) {
 //	   	    UserType userType = userCredentials.getUsers().getUserType();
 //	    if (userType.getId() == 0) { 
 //	        userTypeRepo.save(userType);
@@ -40,7 +40,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
 //	    userRepository.save(users);
 //
 //	    userCredentials.setUsers(users);
-	    return credentialsRepo.save(userCredentials);
-	}
+//	    return credentialsRepo.save(userCredentials);
+//	}
 
 }
