@@ -9,4 +9,5 @@ public interface CommunicationService {
     CommunicationLog createCommunicationLog(CommunicationLog communicationLog);
     CommunicationLog updateCommunicationLog(Integer id, CommunicationLog communicationLog);
     void deleteCommunicationLog(Integer id);
+	CommunicationLog getAllCommunicationData(Integer userId);
 }
