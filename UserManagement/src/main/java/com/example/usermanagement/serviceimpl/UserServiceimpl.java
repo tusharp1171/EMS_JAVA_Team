@@ -4,7 +4,10 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.example.usermanagement.dto.Coursedto;
+import com.example.usermanagement.dto.CouseEnquriymapDTO;
 import com.example.usermanagement.model.UserType;
 import com.example.usermanagement.model.Users;
 import com.example.usermanagement.repository.UserRepository;
@@ -22,24 +25,29 @@ public class UserServiceimpl implements UserService {
 
 	    @Autowired
 	    private UserTypeRepo userTypeRepo;
-
+         
+	    @Autowired
+	    private RestTemplate restTemplate;
+	    
 	    @Override
 	    @Transactional
 	    public Users addUsers(@Valid Users users) {
-	   
-
-//	        // Ensure bidirectional relationships are maintained
-//	        if (users.getUserAdresses() != null) {
-//	            users.getUserAdresses().forEach(address -> address.setUsers(users));
-//	        }
-//	        if (users.getUserCredentials() != null) {
-//	            users.getUserCredentials().forEach(credential -> credential.setUsers(users));
-//	        }
-//	        if (users.getUserEducationDetails() != null) {
-//	            users.getUserEducationDetails().forEach(educationDetail -> educationDetail.setUsers(users));
-//	        }
-
-	        // Save the Users entity and its related entities
+	  
 	        return userRepository.save(users);
 	    }
+
+		@Override
+		public void addCouseEnquriymapDTO(CouseEnquriymapDTO couseEnquriymapDTO) {
+			
+			Coursedto coursedto=couseEnquriymapDTO.getCoursedto();
+			coursedto.set
+		
+			CouseEnquriymapDTO enquriymapDTO=new CouseEnquriymapDTO();
+			enquriymapDTO.setCoursedto(restTemplate.postForEntity("http://localhost:8083/enquiries/add/1/1", enquriymapDTO, null));
+			
+		}
+	    
+	    
+	    
+	   
 	}

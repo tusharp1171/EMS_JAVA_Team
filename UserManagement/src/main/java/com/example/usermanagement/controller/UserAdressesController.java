@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.usermanagement.exception.ErrorDetails;
+import com.example.usermanagement.exception.UserNotFoundException;
 import com.example.usermanagement.model.UserAdresses;
 import com.example.usermanagement.service.UserAdressesService;
 
@@ -32,7 +34,7 @@ public class UserAdressesController {
 	UserAdressesService adressesService;
 
 	@PostMapping("/add")
-	public ResponseEntity<?> addUserAdresses(@Valid @RequestBody UserAdresses userAdresses) {
+	public ResponseEntity<?> addUserAdresses(@Valid @RequestBody UserAdresses userAdresseslist) {
 //        if (bindingResult.hasErrors()) {
 //            Map<String, String> errors = new HashMap<>();
 //            for (FieldError error : bindingResult.getFieldErrors()) {
@@ -44,7 +46,7 @@ public class UserAdressesController {
 //              return ResponseEntity.badRequest().body(errorDetails);
 //            }
 
-		UserAdresses adresses = adressesService.addUserAdresses(userAdresses);
+	UserAdresses adresses = adressesService.addUserAdresses(userAdresseslist);
 		return ResponseEntity.status(HttpStatus.CREATED).body(adresses);
 	}
 
@@ -59,5 +61,21 @@ public class UserAdressesController {
 	public String deleteUserAdressesByUserId(@PathVariable Long userId) {
 		adressesService.deleteUserAdressesByUserId(userId);
 		return "deleted";
+	}
+	
+	@GetMapping("/Find/{userId}")
+	public ResponseEntity<?> getUserAdressesByUserId(@PathVariable Long userId) {
+		UserAdresses userAdressesUserId=adressesService.getUserAdressesByUserId(userId);
+		return  new ResponseEntity<>(userAdressesUserId, HttpStatus.OK);
+	}
+	
+	@PutMapping("/update/{userId}")
+	public ResponseEntity<?> updateAddressess(@RequestBody UserAdresses userAdresses, @PathVariable Long userId) {
+	    try {
+	        UserAdresses updatedAddresses = adressesService.updateAdresses(userAdresses, userId);
+	        return new ResponseEntity<>(updatedAddresses, HttpStatus.OK);
+	    } catch (UserNotFoundException e) {
+	        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	    }
 	}
 }
