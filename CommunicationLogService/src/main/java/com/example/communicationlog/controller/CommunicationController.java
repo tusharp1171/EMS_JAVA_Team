@@ -29,70 +29,89 @@ import jakarta.validation.Valid;
 @Validated
 public class CommunicationController {
 
-    @Autowired
-    private CommunicationService communicationService;
+	@Autowired
+	private CommunicationService communicationService;
 
-    @GetMapping
-    public ResponseEntity<List<CommunicationLog>> getAllCommunicationLogs() {
-        List<CommunicationLog> communicationLogs = communicationService.getAllCommunicationLogs();
-        return new ResponseEntity<>(communicationLogs, HttpStatus.OK);
-    }
+	@GetMapping
+	public ResponseEntity<List<CommunicationLog>> getAllCommunicationLogs() {
+		List<CommunicationLog> communicationLogs = communicationService.getAllCommunicationLogs();
+		return new ResponseEntity<>(communicationLogs, HttpStatus.OK);
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCommunicationLogById(@PathVariable Integer id) {
-        try {
-            CommunicationLog communicationLog = communicationService.getCommunicationLogById(id);
-            return new ResponseEntity<>(communicationLog, HttpStatus.OK);
-        } catch (DataNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(createResponse("Communication log not found", HttpStatus.NOT_FOUND));
-        }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getCommunicationLogById(@PathVariable(name = "communicationId") Integer id) {
+		try {
+			CommunicationLog communicationLog = communicationService.getCommunicationLogById(id);
+			return new ResponseEntity<>(communicationLog, HttpStatus.OK);
+		} catch (DataNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(createResponse("Communication log not found", HttpStatus.NOT_FOUND));
+		}
+	}
 
-    @PostMapping
-    public ResponseEntity<?> createCommunicationLog(@Valid @RequestBody CommunicationLog communicationLog) {
-        try {
-            CommunicationLog createdCommunicationLog = communicationService.createCommunicationLog(communicationLog);
-            return new ResponseEntity<>(createResponse("Communication log created successfully", HttpStatus.CREATED, createdCommunicationLog), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(createResponse("Failed to create communication log", HttpStatus.INTERNAL_SERVER_ERROR));
-        }
-    }
+	@PostMapping
+	public ResponseEntity<?> createCommunicationLog(@Valid @RequestBody CommunicationLog communicationLog) {
+		try {
+			CommunicationLog createdCommunicationLog = communicationService.createCommunicationLog(communicationLog);
+			return new ResponseEntity<>(createResponse("Communication log created successfully", HttpStatus.CREATED,
+					createdCommunicationLog), HttpStatus.CREATED);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(createResponse("Failed to create communication log", HttpStatus.INTERNAL_SERVER_ERROR));
+		}
+	}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCommunicationLog(@PathVariable Integer id, @Valid @RequestBody CommunicationLog communicationLog) {
-        try {
-            CommunicationLog updatedCommunicationLog = communicationService.updateCommunicationLog(id, communicationLog);
-            return new ResponseEntity<>(createResponse("Communication log updated successfully", HttpStatus.OK, updatedCommunicationLog), HttpStatus.OK);
-        } catch (DataNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(createResponse("Communication log not found for update", HttpStatus.NOT_FOUND));
-        }
-    }
+	@PostMapping("{userId}")
+	public ResponseEntity<CommunicationLog> createCommunicationLog(@PathVariable Integer userId) {
+		try {
+			CommunicationLog communicationData = this.communicationService.getAllCommunicationData(userId);
+			return ResponseEntity.ok().body(communicationData);
+			
+		} 
+		catch (Exception ex) {
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCommunicationLog(@PathVariable Integer id) {
-        try {
-            communicationService.deleteCommunicationLog(id);
-            return new ResponseEntity<>(createResponse("Communication log deleted successfully", HttpStatus.OK), HttpStatus.OK);
-        } catch (DataNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(createResponse("Communication log not found for delete", HttpStatus.NOT_FOUND));
-        }
-    }
+		}
+		return null;
+	}
 
-    private Map<String, Object> createResponse(String message, HttpStatus status) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", status.value());
-        response.put("message", message);
-        return response;
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateCommunicationLog(@PathVariable(name = "communicationId") Integer id,
+			@Valid @RequestBody CommunicationLog communicationLog) {
+		try {
+			CommunicationLog updatedCommunicationLog = communicationService.updateCommunicationLog(id,
+					communicationLog);
+			return new ResponseEntity<>(
+					createResponse("Communication log updated successfully", HttpStatus.OK, updatedCommunicationLog),
+					HttpStatus.OK);
+		} catch (DataNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(createResponse("Communication log not found for update", HttpStatus.NOT_FOUND));
+		}
+	}
 
-    private Map<String, Object> createResponse(String message, HttpStatus status, Object data) {
-        Map<String, Object> response = createResponse(message, status);
-        response.put("data", data);
-        return response;
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteCommunicationLog(@PathVariable(name = "communicationId") Integer id) {
+		try {
+			communicationService.deleteCommunicationLog(id);
+			return new ResponseEntity<>(createResponse("Communication log deleted successfully", HttpStatus.OK),
+					HttpStatus.OK);
+		} catch (DataNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(createResponse("Communication log not found for delete", HttpStatus.NOT_FOUND));
+		}
+	}
+
+	private Map<String, Object> createResponse(String message, HttpStatus status) {
+		Map<String, Object> response = new HashMap<>();
+		response.put("timestamp", LocalDateTime.now());
+		response.put("status", status.value());
+		response.put("message", message);
+		return response;
+	}
+
+	private Map<String, Object> createResponse(String message, HttpStatus status, Object data) {
+		Map<String, Object> response = createResponse(message, status);
+		response.put("data", data);
+		return response;
+	}
 }
