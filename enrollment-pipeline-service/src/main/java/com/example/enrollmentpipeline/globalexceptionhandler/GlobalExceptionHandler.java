@@ -25,7 +25,12 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleUserCredentialsNotFoundException(EntityNotFoundException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), null);
+		
+		ErrorDetails errorDetails = new ErrorDetails
+				(ex.getMessage(), 
+						LocalDateTime.now(), 
+						null,
+						HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 	
@@ -38,7 +43,8 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        ErrorDetails errorDetails = new ErrorDetails("Validation Error", LocalDateTime.now(), errors);
+        ErrorDetails errorDetails = new ErrorDetails
+        		("Validation Error", LocalDateTime.now(), errors,HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
@@ -52,7 +58,7 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         }
 
-        ErrorDetails errorDetails = new ErrorDetails("Constraint Violation", LocalDateTime.now(), errors);
+        ErrorDetails errorDetails = new ErrorDetails("Constraint Violation", LocalDateTime.now(), errors,HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }
