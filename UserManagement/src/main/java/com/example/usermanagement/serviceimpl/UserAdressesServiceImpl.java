@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 
 @Service
 public class UserAdressesServiceImpl implements UserAdressesService {
-
+     
 	@Autowired
 	UserAdressesRepository adressesRepository;
 
@@ -49,14 +49,35 @@ public class UserAdressesServiceImpl implements UserAdressesService {
 	        }
 	    }
 
-	public List<UserAdresses> getUserAdressesByUserId(Long userId) throws UserNotFoundException {
+	public UserAdresses getUserAdressesByUserId(Long userId) throws UserNotFoundException {
 		try {
-			return adressesRepository.findByUserId(userId);
+		//	return adressesRepository.findByUserId(userId);
 		} catch (Exception e) {
 			throw new UserNotFoundException("Incorrect UserId");
 		}
+		return null;
 
 	}
+
+	@Override
+	public UserAdresses updateAdresses(UserAdresses userAdresses, Long userId) throws UserNotFoundException {
+        List<UserAdresses> existingAddresses = adressesRepository.findByUserId(userId);
+        if (existingAddresses.isEmpty()) {
+            throw new UserNotFoundException("No addresses found for user ID: " + userId);
+        }
+
+        UserAdresses existingAddress = existingAddresses.get(0); // Assuming updating the first address found
+        
+        existingAddress.setAddressLineOne(userAdresses.getAddressLineOne());
+        existingAddress.setAddressLineTwo(userAdresses.getAddressLineTwo());
+        existingAddress.setCity(userAdresses.getCity());
+        existingAddress.setState(userAdresses.getState());
+        existingAddress.setPostalCode(userAdresses.getPostalCode());
+
+        adressesRepository.save(existingAddress);
+        
+        return existingAddress;
+    }
 
 //	@Override
 //	public List<UserAdresses> getUserAdressesByUserId(Long userId) {

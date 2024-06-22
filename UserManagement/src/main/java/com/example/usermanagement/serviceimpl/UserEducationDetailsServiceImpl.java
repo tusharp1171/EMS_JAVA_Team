@@ -15,28 +15,27 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Service
-public class UserEducationDetailsServiceImpl implements UserEducationDetailsService{
+public class UserEducationDetailsServiceImpl implements UserEducationDetailsService {
 	@Autowired
 	UserEducationDetailsRepository educationDetailsRepository;
 
 	@Override
-	public UserEducationDetails addEducationDetailsService( UserEducationDetails userEducationDetails) {
+	public UserEducationDetails addEducationDetailsService(UserEducationDetails userEducationDetails) {
 		// TODO Auto-generated method stub
 		return educationDetailsRepository.save(userEducationDetails);
 	}
 
 	@Override
-	 @Transactional
-	public void deleteUserEducationDetailsByUserId(Long userId) throws UserNotFoundException{
-		
-		  
-		        List<UserEducationDetails> educationDetailslist = educationDetailsRepository.findByUserId(userId);
-		        if (educationDetailslist.isEmpty()) {
-		            throw new UserNotFoundException("No addresses found for user ID: " + userId);
-		        }
-		        for (UserEducationDetails educationDetails : educationDetailslist) {
-		        	educationDetailsRepository.deleteById(educationDetails.getId());
-		        }
-		    }
+	@Transactional
+	public void deleteUserEducationDetailsByUserId(Long userId) throws UserNotFoundException {
+
+		List<UserEducationDetails> educationDetailslist = educationDetailsRepository.findByUserId(userId);
+		if (educationDetailslist.isEmpty()) {
+			throw new UserNotFoundException("No addresses found for user ID: " + userId);
+		}
+		for (UserEducationDetails educationDetails : educationDetailslist) {
+			educationDetailsRepository.deleteById(educationDetails.getId());
+		}
+	}
 
 }

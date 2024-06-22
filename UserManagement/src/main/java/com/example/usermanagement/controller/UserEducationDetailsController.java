@@ -2,6 +2,7 @@ package com.example.usermanagement.controller;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserEducationDetailsController {
 UserEducationDetailsService educationDetailsService;
 
 @PostMapping("/add")
-public ResponseEntity<?> addEducationDetailsService(@Valid @RequestBody UserEducationDetails userEducationDetails, BindingResult bindingResult) {
+public ResponseEntity<?> addEducationDetailsService(@Valid @RequestBody UserEducationDetails userEducationDetailslist, BindingResult bindingResult) {
      if (bindingResult.hasErrors()) {
          Map<String, String> errors = new HashMap<>();
          for (FieldError error : bindingResult.getFieldErrors()) {
@@ -41,8 +42,8 @@ public ResponseEntity<?> addEducationDetailsService(@Valid @RequestBody UserEduc
             return ResponseEntity.badRequest().body(errorDetails);
          }
 
-     UserEducationDetails  educationDetails= educationDetailsService.addEducationDetailsService(userEducationDetails);
-        return ResponseEntity.status(HttpStatus.CREATED).body(educationDetails);
+     UserEducationDetails  educationDetailslist= educationDetailsService.addEducationDetailsService(userEducationDetailslist);
+        return ResponseEntity.status(HttpStatus.CREATED).body(educationDetailslist);
     }
 
 @DeleteMapping("/usereducation/{userId}")

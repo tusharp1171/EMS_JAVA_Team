@@ -20,5 +20,6 @@ public interface UserAdressesRepository extends JpaRepository<UserAdresses, Inte
 //	    @Query(value = "DELETE FROM user_address WHERE user_id = :userId", nativeQuery = true)
 //	    void deleteByUserId();
 //
+	
 	List<UserAdresses> findByUserId(Long userId);
 }
