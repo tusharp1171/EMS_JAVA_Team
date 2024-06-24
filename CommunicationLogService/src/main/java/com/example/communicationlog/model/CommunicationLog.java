@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data
@@ -20,9 +21,9 @@ public class CommunicationLog {
 	private Integer communicationId;
 	private Integer enquiryId;
 	private Integer customerId;
+	private Integer activityId;
 	private Integer actvityStatusId;
-	private Integer salesRepresentativeId;
+	private Long salesRepresentativeId;
 	private LocalDateTime communicationDate;
-	private String communicationDetails;
 
 }
