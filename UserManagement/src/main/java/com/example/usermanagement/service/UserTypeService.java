@@ -6,6 +6,6 @@ import jakarta.validation.Valid;
 
 public interface UserTypeService {
 
-	UserType addUserType(UserType userType);
+	//UserType addUserType(UserType userType);
 
 }

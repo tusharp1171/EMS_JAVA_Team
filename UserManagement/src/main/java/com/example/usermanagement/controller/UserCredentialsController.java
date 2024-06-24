@@ -29,20 +29,20 @@ public class UserCredentialsController {
 	@Autowired
 	UserCredentialsService credentialsService;
 
-	  @PostMapping("/add/{uId}")
-	    public ResponseEntity<?> addUserCredentials(@Valid @RequestBody UserCredentials userCredentials, BindingResult bindingResult) {
-	        if (bindingResult.hasErrors()) {
-	            Map<String, String> errors = new HashMap<>();
-	            for (FieldError error : bindingResult.getFieldErrors()) {
-	                String fieldName = error.getField();
-	                String errorMessage = error.getDefaultMessage();
-	                errors.put(fieldName, errorMessage);
-	            }
-	           //   ErrorDetails errorDetails = new ErrorDetails(errors, LocalDateTime.now());
-	          //     return ResponseEntity.badRequest().body(errorDetails);
-	            }
-
-	            UserCredentials credentials = credentialsService.addUserCredentials(userCredentials);
-	            return ResponseEntity.status(HttpStatus.CREATED).body(credentials);
-	        }
+//	  @PostMapping("/add/{uId}")
+//	   public ResponseEntity<?> addUserCredentials(@Valid @RequestBody UserCredentials userCredentials, BindingResult bindingResult) {
+//	        if (bindingResult.hasErrors()) {
+//	            Map<String, String> errors = new HashMap<>();
+//	            for (FieldError error : bindingResult.getFieldErrors()) {
+//	                String fieldName = error.getField();
+//	                String errorMessage = error.getDefaultMessage();
+//	                errors.put(fieldName, errorMessage);
+//	            }
+//	           //   ErrorDetails errorDetails = new ErrorDetails(errors, LocalDateTime.now());
+//	          //     return ResponseEntity.badRequest().body(errorDetails);
+//	            }
+//
+////	            UserCredentials credentials = credentialsService.addUserCredentials(userCredentials);
+////	            return ResponseEntity.status(HttpStatus.CREATED).body(credentials);
+//	        }
 	    }

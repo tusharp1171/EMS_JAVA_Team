@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.usermanagement.exception.ErrorDetails;
 import com.example.usermanagement.exception.UserCredentialsNotFoundException;
+import com.example.usermanagement.exception.UserNotFoundException;
 
 
 @RestControllerAdvice
@@ -22,6 +23,11 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(UserCredentialsNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleUserCredentialsNotFoundException(UserCredentialsNotFoundException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), null);
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleUserNotFoundException(UserNotFoundException ex) {
         ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), null);
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

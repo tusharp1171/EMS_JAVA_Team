@@ -20,14 +20,18 @@ public class UserCredentials {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-	private Users users;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//	private Users users;
+	
+	@NotBlank(message = "userId is required")
+	@Size(min =5)
+	private int userId;
 	@NotBlank(message = "email is required")
 	@Size(min =5)
 	private String email;
 	//@NotBlank(message = "mobile is required")
-	private Long mobile;
+   // private Long mobile;
 	@NotBlank(message = "password is required")
 	@Size(min =5)
 	private String password;
