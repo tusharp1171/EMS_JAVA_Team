@@ -28,7 +28,7 @@ public class Activities {
 	private int id;
 	
 	
-	@Column(name = "dueDate", nullable = false)
+	@Column(name = "dueDate")
 	private LocalDateTime dueDate;
 	
 	@Column(name = "salesRepresentativeId")

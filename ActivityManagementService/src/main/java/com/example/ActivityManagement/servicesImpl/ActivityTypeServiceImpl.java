@@ -36,7 +36,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     }
 
     @Override
-	public ActivityType saveActivityType(String typeName) {
+	public ActivityType saveActivityType(ActivityType typeName) {
 //        return activityTypeRepository.save(activityType);
     	ActivityType saveType = this.activityTypeRepository.save(typeName);
     	return saveType;

@@ -1,12 +1,15 @@
 package com.example.ActivityManagement.servicesImpl;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.ActivityManagement.CustomException.EntityNotFoundException;
+import com.example.ActivityManagement.dto.ActivityDto;
 import com.example.ActivityManagement.model.Activities;
 import com.example.ActivityManagement.model.ActivityStatus;
 import com.example.ActivityManagement.model.ActivityType;
@@ -27,6 +30,9 @@ public class ActivitiesServicesImpl implements ActivitiesService {
 	
 	@Autowired
 	ActivityTypeRepository activityTypeRepository;
+	
+	@Autowired
+	RestTemplate restTemplate;
 
 	@Override
     public List<Activities> getAllActivities() {
@@ -40,19 +46,25 @@ public class ActivitiesServicesImpl implements ActivitiesService {
 
     @Override
     public Activities saveActivity(Activities activity) {
-//    	 ActivityStatus createStat = new ActivityStatus();
-//    	 createStat.setStatusName(activity.getActivityStatus().getStatusName());
-//    	 activityStatusRepository.save(createStat);
-//    	 
-//    	 ActivityType createType = new ActivityType();
-//    	 createType .setTypeName(activity.getActivityType().getTypeName());
-//    	 activityTypeRepository.save(createType);
-    	 
-    	return repo.save(activity);
+//    	return repo.save(activity);
+    	Activities actObj = this.repo.save(activity);
+    	ActivityDto  newObj = new ActivityDto ();
+    		newObj.setActvityId(actObj.getId());
+    		System.out.println(actObj.getId());
+    		
+    		newObj.setActivityStatusId(actObj.getActivityStatus().getId());
+    		newObj.setSalesRepresentativeId(actObj.getSalesRepresentativeId());
+    		
+    		restTemplate.postForEntity("http://192.168.1.126:8084/api/communication-logs/activity", newObj, ActivityDto.class);
+    		
+    		return actObj;
+    	
+    		
+    		
+    	
     }
 
     
-
 	@Override
 	public Activities updateActivity(int id, Activities act) {
 		
