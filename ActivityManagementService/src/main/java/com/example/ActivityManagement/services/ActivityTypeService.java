@@ -13,6 +13,6 @@ public interface ActivityTypeService {
     ActivityType getActivityTypeById(Integer id);
     void deleteActivityType(Integer id);
 	ActivityType updateActivityType(int id, ActivityType activityType);
-	ActivityType saveActivityType(String typeName);
+	ActivityType saveActivityType(ActivityType typeName);
 
 }
