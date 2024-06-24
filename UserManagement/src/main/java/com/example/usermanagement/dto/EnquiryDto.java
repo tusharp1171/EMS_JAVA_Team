@@ -8,7 +8,7 @@ public class EnquiryDto {
     private String email;
     private String mobileNo;
     private String enquirySource;
-    private Integer courseId;
-    private Integer pipeLinePhaseId;
+    private CoursesDTO courses;
+    private PipeLinePhasesDTO pipeLinePhases;
     private long salesPersonId;
 }

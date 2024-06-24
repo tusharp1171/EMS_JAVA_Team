@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.usermanagement.dto.Coursedto;
 import com.example.usermanagement.dto.CouseEnquriymapDTO;
 import com.example.usermanagement.model.UserType;
 import com.example.usermanagement.model.Users;
@@ -39,12 +38,7 @@ public class UserServiceimpl implements UserService {
 		@Override
 		public void addCouseEnquriymapDTO(CouseEnquriymapDTO couseEnquriymapDTO) {
 			
-			Coursedto coursedto=couseEnquriymapDTO.getCoursedto();
-			coursedto.set
 		
-			CouseEnquriymapDTO enquriymapDTO=new CouseEnquriymapDTO();
-			enquriymapDTO.setCoursedto(restTemplate.postForEntity("http://localhost:8083/enquiries/add/1/1", enquriymapDTO, null));
-			
 		}
 	    
 	    
