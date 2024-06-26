@@ -75,6 +75,21 @@ public class CommunicationController {
             return new ResponseEntity<>(communicationLogs, HttpStatus.OK);
         }
     }
+	@GetMapping("/enquiryId")
+    public ResponseEntity<Integer> getEnquiryId() {
+        try {
+            Integer enquiryId = this.communicationService.findEnquiryId();
+            if (enquiryId != null) {
+                return ResponseEntity.ok(enquiryId);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            // Log the exception (you can use a logging framework like SLF4J)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 
 	@PostMapping
