@@ -17,4 +17,5 @@ public interface CommunicationService {
 	CommunicationLog createCommunicationLogWithActivity(ActivityDto actObj);
 	Optional<CommunicationLog> findCommunicationDataByUserId(long salesRepresentativeId);
 	List<CommunicationLog> findCommunicationLogsBySalesRepresentativeId();
+	Integer findEnquiryId();
 }

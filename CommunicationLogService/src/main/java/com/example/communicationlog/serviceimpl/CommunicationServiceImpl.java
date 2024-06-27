@@ -92,52 +92,44 @@ public class CommunicationServiceImpl implements CommunicationService {
 
 	@Override
 	public Optional<CommunicationLog> findCommunicationDataByUserId(long salesRepresentativeId) {
-	    return this.communicationLogRepository.findBySalesRepresentativeId(salesRepresentativeId);
+		return this.communicationLogRepository.findBySalesRepresentativeId(salesRepresentativeId);
 	}
-	
+
 	@Override
 	public List<CommunicationLog> findCommunicationLogsBySalesRepresentativeId() {
-        return this.communicationLogRepository.findAll();
-    }
-/*	
-	@Override
-	public CommunicationLog createCommLogWithEnquiry(EnquiryDto enqObj) {
-	    try {
-	        System.out.println(enqObj);
-
-	        // Always create a new CommunicationLog object
-	        CommunicationLog saveObj = new CommunicationLog();
-	        saveObj.setEnquiryId(enqObj.getEnquiryId());
-	        saveObj.setSalesRepresentativeId(enqObj.getSalesPersonId().longValue());
-	        saveObj.setCustomerId(enqObj.getSalesPersonId());
-	        saveObj.setCommunicationDate(LocalDateTime.now());
-
-	        return this.communicationLogRepository.save(saveObj);
-	    } catch (Exception e) {
-	        throw new RuntimeException("Failed to create communication log with enquiry", e);
-	    }
+		return this.communicationLogRepository.findAll();
 	}
-	
-	@Override
-	public CommunicationLog createCommunicationLogWithActivity(ActivityDto actObj) {
-	    try {
-	        System.out.println(actObj);
 
-	        // Always create a new CommunicationLog object
-	        CommunicationLog saveObj = new CommunicationLog();
-	        saveObj.setActivityId(actObj.getActvityId());
-	        saveObj.setActvityStatusId(actObj.getActivityStatusId());
-	        saveObj.setCustomerId(actObj.getSalesRepresentativeId());
-	        saveObj.setSalesRepresentativeId(actObj.getSalesRepresentativeId().longValue());
-	        saveObj.setCommunicationDate(LocalDateTime.now());
-
-	        return this.communicationLogRepository.save(saveObj);
-	    } catch (Exception e) {
-	        throw new RuntimeException("Failed to create communication log with activity", e);
-	    }
-	}
-	
-*/
+	/*
+	 * @Override public CommunicationLog createCommLogWithEnquiry(EnquiryDto enqObj)
+	 * { try { System.out.println(enqObj);
+	 * 
+	 * // Always create a new CommunicationLog object CommunicationLog saveObj = new
+	 * CommunicationLog(); saveObj.setEnquiryId(enqObj.getEnquiryId());
+	 * saveObj.setSalesRepresentativeId(enqObj.getSalesPersonId().longValue());
+	 * saveObj.setCustomerId(enqObj.getSalesPersonId());
+	 * saveObj.setCommunicationDate(LocalDateTime.now());
+	 * 
+	 * return this.communicationLogRepository.save(saveObj); } catch (Exception e) {
+	 * throw new RuntimeException("Failed to create communication log with enquiry",
+	 * e); } }
+	 * 
+	 * @Override public CommunicationLog
+	 * createCommunicationLogWithActivity(ActivityDto actObj) { try {
+	 * System.out.println(actObj);
+	 * 
+	 * // Always create a new CommunicationLog object CommunicationLog saveObj = new
+	 * CommunicationLog(); saveObj.setActivityId(actObj.getActvityId());
+	 * saveObj.setActvityStatusId(actObj.getActivityStatusId());
+	 * saveObj.setCustomerId(actObj.getSalesRepresentativeId());
+	 * saveObj.setSalesRepresentativeId(actObj.getSalesRepresentativeId().longValue(
+	 * )); saveObj.setCommunicationDate(LocalDateTime.now());
+	 * 
+	 * return this.communicationLogRepository.save(saveObj); } catch (Exception e) {
+	 * throw new
+	 * RuntimeException("Failed to create communication log with activity", e); } }
+	 * 
+	 */
 	@Override
 	public CommunicationLog createCommLogWithEnquiry(EnquiryDto enqObj) {
 		Optional<CommunicationLog> commObj = null;
@@ -148,8 +140,7 @@ public class CommunicationServiceImpl implements CommunicationService {
 				updateObj.setEnquiryId(enqObj.getEnquiryId());
 				updateObj.setCommunicationDate(LocalDateTime.now());
 				return this.communicationLogRepository.save(updateObj);
-			} 
-			else {
+			} else {
 				CommunicationLog saveObj = new CommunicationLog();
 				saveObj.setEnquiryId(enqObj.getEnquiryId());
 				saveObj.setSalesRepresentativeId((long) enqObj.getSalesPersonId());
@@ -161,27 +152,45 @@ public class CommunicationServiceImpl implements CommunicationService {
 		}
 	}
 
+	public Integer findEnquiryId() {
+		try {
+			ResponseEntity<Integer> currentId = this.restTemplate.getForEntity(this.userApiCall.getUserUrl(),
+					Integer.class);
+			if (currentId.getStatusCode().is2xxSuccessful() && currentId.getBody() != null) {
+				Integer salesRepresentativeId = currentId.getBody();
+				Optional<CommunicationLog> getObj = this.communicationLogRepository
+						.findBySalesRepresentativeId(salesRepresentativeId);
+				return getObj.map(CommunicationLog::getEnquiryId).orElse(null);
+			} else {
+				// Handle cases where the response is not successful or the body is null
+				return null;
+			}
+		} catch (Exception e) {
+			// Log the exception (you can use a logging framework like SLF4J)
+			return null;
+		}
+	}
+
 	@Override
 	public CommunicationLog createCommunicationLogWithActivity(ActivityDto actObj) {
 		Optional<CommunicationLog> commObj = null;
 		try {
 			System.out.println(actObj);
-			 commObj = this.communicationLogRepository.findByActivityId(actObj.getActvityId());
+			commObj = this.communicationLogRepository.findByActivityId(actObj.getActvityId());
 			if (commObj.isPresent()) {
 				CommunicationLog updateObj = commObj.get();
 				updateObj.setActivityId(actObj.getActvityId());
 				updateObj.setActvityStatusId(actObj.getActivityStatusId());
 				updateObj.setCustomerId(actObj.getSalesRepresentativeId());
 				updateObj.setCommunicationDate(LocalDateTime.now());
-				
+
 				return this.communicationLogRepository.save(updateObj);
-			} 
-			else {
+			} else {
 				CommunicationLog saveObj = new CommunicationLog();
 				saveObj.setActivityId(actObj.getActvityId());
 				saveObj.setActvityStatusId(actObj.getActivityStatusId());
 				saveObj.setCustomerId(actObj.getSalesRepresentativeId());
-				saveObj.setSalesRepresentativeId((long)actObj.getSalesRepresentativeId());
+				saveObj.setSalesRepresentativeId((long) actObj.getSalesRepresentativeId());
 				saveObj.setCommunicationDate(LocalDateTime.now());
 				return this.communicationLogRepository.save(saveObj);
 			}
@@ -189,5 +198,5 @@ public class CommunicationServiceImpl implements CommunicationService {
 			throw new RuntimeException("Failed to create communication log with activity", e);
 		}
 	}
-	
+
 }
