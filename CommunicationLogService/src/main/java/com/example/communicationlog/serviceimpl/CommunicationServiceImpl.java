@@ -156,6 +156,7 @@ public class CommunicationServiceImpl implements CommunicationService {
 		try {
 			ResponseEntity<Integer> currentId = this.restTemplate.getForEntity(this.userApiCall.getUserUrl(),
 					Integer.class);
+			System.out.println(currentId);
 			if (currentId.getStatusCode().is2xxSuccessful() && currentId.getBody() != null) {
 				Integer salesRepresentativeId = currentId.getBody();
 				Optional<CommunicationLog> getObj = this.communicationLogRepository
