@@ -1,5 +1,6 @@
 package com.example.enrollmentpipeline.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.enrollmentpipeline.model.Courses;
@@ -15,4 +16,7 @@ public interface EnquiriesService {
 	    void deleteEnquiry(int id);
 	    
 		Enquiries saveEnquiry(Enquiries enquiry, int id, int pipeLinePhaseId);
+		public List<Enquiries> getEnquiriesByDate(LocalDateTime date) ;
+		List<Enquiries> getEnquiriesBetweenDates(LocalDateTime startDate, LocalDateTime endDate);
+
 }

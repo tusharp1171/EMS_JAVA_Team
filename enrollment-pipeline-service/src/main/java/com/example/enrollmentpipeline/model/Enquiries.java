@@ -1,9 +1,8 @@
 package com.example.enrollmentpipeline.model;
-import java.util.List;
-import org.hibernate.validator.constraints.NotBlank;
-import com.example.enrollmentpipeline.dto.Admissions;
-import com.example.enrollmentpipeline.dto.Users;
-import jakarta.persistence.CascadeType;
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,137 +10,113 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Enquiries {
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer enquiryId;
 
-	private Integer enquiryId; 
     @NotNull(message = "name is mandatory")
-//    @Size(min = 10, message = "Minimum 10 characters required")
-    private String name; 
+    private String name;
+
     @NotNull(message = "email is mandatory")
     private String email;
+
     @NotNull(message = "mobileNo is mandatory")
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid mobile number")
-    private String mobileNo; 
+    private String mobileNo;
+
     @NotNull(message = "enquirySource is mandatory")
-    private String enquirySource; 
-    
-    @ManyToOne (fetch=FetchType.EAGER)
+    private String enquirySource;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId")
-    private Courses courses ;
-    
-    @ManyToOne (fetch=FetchType.EAGER)
-    @JoinColumn(name = "pipeLinePhaseId",nullable = false)
-    private PipeLinePhases pipeLinePhases ;
-    
-    
+    private Courses courses;
 
-	public Enquiries(@NotNull(message = "name is mandatory") String name,
-			@NotNull(message = "email is mandatory") String email,
-			@NotNull(message = "mobileNo is mandatory") @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid mobile number") String mobileNo,
-			@NotNull(message = "enquirySource is mandatory") String enquirySource, Courses courses,
-			PipeLinePhases pipeLinePhases, int salesPersonId) {
-		super();
-		this.name = name;
-		this.email = email;
-		this.mobileNo = mobileNo;
-		this.enquirySource = enquirySource;
-		this.courses = courses;
-		this.pipeLinePhases = pipeLinePhases;
-		this.salesPersonId = salesPersonId;
-	}
-	
-	
-	
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pipeLinePhaseId", nullable = false)
+    private PipeLinePhases pipeLinePhases;
 
-	public Enquiries() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    @Column(name = "created_date", nullable = false)
+    private LocalDateTime createdDate; // Add this field for created date
 
-	public Integer getEnquiryId() {
-		return enquiryId;
-	}
+    // Getters and setters
+    public Integer getEnquiryId() {
+        return enquiryId;
+    }
 
-//	public void setEnquiryId(Integer enquiryId) {
-//		this.enquiryId = enquiryId;
-//	}
+    public void setEnquiryId(Integer enquiryId) {
+        this.enquiryId = enquiryId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getMobileNo() {
-		return mobileNo;
-	}
+    public String getMobileNo() {
+        return mobileNo;
+    }
 
-	public void setMobileNo(String mobileNo) {
-		this.mobileNo = mobileNo;
-	}
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
 
-	public String getEnquirySource() {
-		return enquirySource;
-	}
+    public String getEnquirySource() {
+        return enquirySource;
+    }
 
-	public void setEnquirySource(String enquirySource) {
-		this.enquirySource = enquirySource;
-	}
+    public void setEnquirySource(String enquirySource) {
+        this.enquirySource = enquirySource;
+    }
 
-	public Courses getCourses() {
-		return courses;
-	}
+    public Courses getCourses() {
+        return courses;
+    }
 
-	public void setCourses(Courses courses) {
-		this.courses = courses;
-	}
+    public void setCourses(Courses courses) {
+        this.courses = courses;
+    }
 
-	public PipeLinePhases getPipeLinePhases() {
-		return pipeLinePhases;
-	}
+    public PipeLinePhases getPipeLinePhases() {
+        return pipeLinePhases;
+    }
 
-	public void setPipeLinePhases(PipeLinePhases pipeLinePhases) {
-		this.pipeLinePhases = pipeLinePhases;
-	} 
-    
-    
-    private long salesPersonId;
+    public void setPipeLinePhases(PipeLinePhases pipeLinePhases) {
+        this.pipeLinePhases = pipeLinePhases;
+    }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
 
-
-	public long getSalesPersonId() {
-		return salesPersonId;
-	}
-
-
-	public void setSalesPersonId(long salesPersonId) {
-		this.salesPersonId = salesPersonId;
-	}
-    
-    
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+    @PrePersist
+    protected void onCreate() {
+        createdDate = LocalDateTime.now(); // or use your preferred method to set the date
+    }
 }

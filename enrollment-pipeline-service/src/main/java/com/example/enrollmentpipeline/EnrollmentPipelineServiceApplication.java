@@ -18,4 +18,3 @@ public class EnrollmentPipelineServiceApplication {
 	        return new RestTemplate();
 	    }
 }
-

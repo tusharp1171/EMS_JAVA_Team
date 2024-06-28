@@ -1,6 +1,7 @@
-
 package com.example.enrollmentpipeline.serviceimpl;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,17 @@ public class EnquiriesServiceImpl implements EnquiriesService {
 	    // Save the enquiry
 	    return enquiriesRepository.save(enquiry);
 	}
+	
+	public List<Enquiries> getEnquiriesByDate(LocalDateTime date) {
+        LocalDateTime startOfDay = date.with(LocalTime.MIN);
+        LocalDateTime endOfDay = date.with(LocalTime.MAX);
+
+        
+        return enquiriesRepository.findByCreatedDateBetween(startOfDay, endOfDay);
+    }
+	
+	 public List<Enquiries> getEnquiriesBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+	        return enquiriesRepository.findByCreatedDateBetween(startDate, endDate);
+	    }
 
 }
