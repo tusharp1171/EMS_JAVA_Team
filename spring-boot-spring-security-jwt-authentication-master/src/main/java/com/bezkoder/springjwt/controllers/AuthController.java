@@ -136,23 +136,29 @@ public class AuthController {
     }
     user.setRoles(roles);
     userRepository.save(user);
+    
     UserEducationDetails userEducationDetails=signUpRequest.getUserEducationDetails();
     userEducationDetails.setUserId(user.getId());
     UserAddressDto userAddressDto=signUpRequest.getUserAddressDto();
     userAddressDto.setUserId(user.getId());
+    System.out.println(user.getId());
+ 
+    
 
-    if (signUpRequest.getUserAddressDto() != null) {
+   if (signUpRequest.getUserAddressDto() != null) {
        restTemplate.postForEntity(
-                "http://192.168.1.103:8081/userAdresses/add",
+                "http://192.168.1.144:8081/userAdresses/add",
                 userAddressDto,
                 UserAddressDto.class);    
+      
     }
     if (signUpRequest.getUserEducationDetails() != null) {
     restTemplate.postForEntity(
-                "http://192.168.1.103:8081/userEducationDetails/add",
+                "http://192.168.1.144:8081/userEducationDetails/add",
                 userEducationDetails,
                 UserEducationDetails.class);  
     }
+   
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
   
@@ -165,9 +171,9 @@ public class AuthController {
 
         
           restTemplate.delete(
-                  "http://192.168.1.103:8081/userEducationDetails/usereducation/" + userid);
+                  "http://192.168.1.144:8081/userEducationDetails/usereducation/" + userid);
      restTemplate.delete(
-                  "http://192.168.1.103:8081/userAdresses/user/" + userid);
+                  "http://192.168.1.144:8081/userAdresses/user/" + userid);
               userRepository.deleteById(id);
               return ResponseEntity.ok("User and associated details deleted successfully.");
           

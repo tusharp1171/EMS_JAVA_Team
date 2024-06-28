@@ -1,5 +1,6 @@
 package com.example.coursemanagement.controller;
 
+import com.example.coursemanagement.dto.SyallbussubjectidDto;
 import com.example.coursemanagement.dto.SyllabusDTO;
 import com.example.coursemanagement.model.Syllabus;
 import com.example.coursemanagement.service.SyllabusService;
@@ -8,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -22,6 +27,8 @@ public class SyllabusController {
     @Autowired
     private SyllabusService syllabusService;
 
+    @Autowired
+    private RestTemplate restTemplate;
 	    @GetMapping
 	    public ResponseEntity<List<Syllabus>> getAllSyllabuses() {
 	        List<Syllabus> syllabuses = syllabusService.getAllSyllabi();
@@ -45,6 +52,15 @@ public class SyllabusController {
                                                    @RequestParam String sectionName,
                                                    @RequestParam String topicName) {
         Syllabus createdSyllabus = syllabusService.createSyllabus(subjectId, courseTypeId, sectionName, topicName);
+       int syid=createdSyllabus.getId();
+       int subid=createdSyllabus.getSubject().getId();
+       
+       SyallbussubjectidDto sy= new SyallbussubjectidDto();
+       sy.setSubjectId(subid);
+       sy.setSyallbusId(syid);
+       
+       
+       restTemplate.postForEntity("http://192.168.1.131:8087/api/timetable/syallbus", sy, SyallbussubjectidDto.class);       
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSyllabus);
     }
     @PutMapping("/{id}")
