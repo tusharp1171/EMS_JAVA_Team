@@ -1,6 +1,9 @@
 package com.example.admissionsfee.entities;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +26,7 @@ public class FeePayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+//    private Long admissionId;
 
     private double amountCredited;
 
@@ -36,9 +40,9 @@ public class FeePayment {
     @Temporal(TemporalType.DATE)
     private Date nextDueDate;
     
- // Many-to-one relationship to Admission
+    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admission_id", nullable = false)
+    @JoinColumn(name = "admission_id")
     private Admission admission;
-
 }

@@ -1,34 +1,30 @@
 package com.example.admissionsfee.serviceImpl;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.example.admissionsfee.dto.AdmissionDTO;
-import com.example.admissionsfee.dto.EnquiryDTO;
 import com.example.admissionsfee.entities.Admission;
 import com.example.admissionsfee.exception.ResourceNotFoundException;
 import com.example.admissionsfee.repo.AdmissionRepository;
+import com.example.admissionsfee.repo.FeePaymentRepository;
 import com.example.admissionsfee.service.AdmissionService;
-import com.example.admissionsfee.service.FeePaymentService;
+
+import com.example.admissionsfee.dto.FeePaymentDTO;
+import com.example.admissionsfee.entities.FeePayment;
 
 @Service
 public class AdmissionServiceImpl implements AdmissionService {
 
     @Autowired
     private AdmissionRepository admissionRepository;
-    @Autowired
-    private FeePaymentService feePaymentService;
-    @Autowired
-    private RestTemplate restTemplate;
-
-    private EnquiryDTO getEnquiryById(Long enquiryId) {
-        String url = "http://enrollment-service/enquiries/" + enquiryId;
-        return restTemplate.getForObject(url, EnquiryDTO.class);
-    }    
     
+    @Autowired
+    private FeePaymentRepository feePaymentRepository;
+
     @Override
     public List<AdmissionDTO> getAllAdmissions() {
         return admissionRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -44,7 +40,30 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public AdmissionDTO createAdmission(AdmissionDTO admissionDTO) {
         Admission admission = convertToEntity(admissionDTO);
+        
+        // Save admission first to generate the ID
         Admission savedAdmission = admissionRepository.save(admission);
+        
+        // Now create and save FeePayments if they exist
+        List<FeePaymentDTO> feesdto = admissionDTO.getFeePayments();
+        if (feesdto != null) {
+            for (FeePaymentDTO feeDTO : feesdto) {
+            	
+                FeePayment feePayment = new FeePayment();
+                feePayment.setAmountCredited(feeDTO.getAmountCredited());
+                feePayment.setBalanceAmount(feeDTO.getBalanceAmount());
+                feePayment.setPaymentDate(feeDTO.getPaymentDate());
+                feePayment.setPaymentMethod(feeDTO.getPaymentMethod());
+                feePayment.setNextDueDate(feeDTO.getNextDueDate());
+                
+                // Set the saved Admission to the FeePayment
+                feePayment.setAdmission(savedAdmission);
+                
+                // Save the FeePayment
+                feePaymentRepository.save(feePayment);
+            }
+        }
+        
         return convertToDTO(savedAdmission);
     }
 
@@ -72,25 +91,60 @@ public class AdmissionServiceImpl implements AdmissionService {
     }
 
     private AdmissionDTO convertToDTO(Admission admission) {
-        AdmissionDTO dto = new AdmissionDTO();
-        dto.setId(admission.getId());
-        dto.setEnquiryId(admission.getEnquiryId());
-        dto.setAdmissionDate(admission.getAdmissionDate());
-        dto.setDescription(admission.getDescription());
-        dto.setStatus(admission.getStatus());
-        dto.setFeePayments(admission.getFeePayments().stream()
-                         .map(feePaymentService::convertToDTO)
-                         .collect(Collectors.toList()));
-        return dto;
+        AdmissionDTO admissionDTO = new AdmissionDTO();
+        admissionDTO.setId(admission.getId());
+        admissionDTO.setEnquiryId(admission.getEnquiryId());
+        admissionDTO.setAdmissionDate(admission.getAdmissionDate());
+        admissionDTO.setDescription(admission.getDescription());
+        admissionDTO.setStatus(admission.getStatus());
+        // Convert FeePayments to FeePaymentDTOs
+        if (admission.getFeePayments() != null) {
+            List<FeePaymentDTO> feePaymentDTOs = admission.getFeePayments().stream()
+                .map(this::convertFeePaymentToDTO)
+                .collect(Collectors.toList());
+            admissionDTO.setFeePayments(feePaymentDTOs);
+        }
+        return admissionDTO;
     }
 
-    private Admission convertToEntity(AdmissionDTO dto) {
+    private Admission convertToEntity(AdmissionDTO admissionDTO) {
         Admission admission = new Admission();
-        admission.setId(dto.getId());
-        admission.setEnquiryId(dto.getEnquiryId());
-        admission.setAdmissionDate(dto.getAdmissionDate());
-        admission.setDescription(dto.getDescription());
-        admission.setStatus(dto.getStatus());
+        admission.setEnquiryId(admissionDTO.getEnquiryId());
+        admission.setAdmissionDate(admissionDTO.getAdmissionDate());
+        admission.setDescription(admissionDTO.getDescription());
+        admission.setStatus(admissionDTO.getStatus());
+        // Convert FeePaymentDTOs to FeePayments
+        if (admissionDTO.getFeePayments() != null) {
+            List<FeePayment> feePayments = admissionDTO.getFeePayments().stream()
+                .map(this::convertFeePaymentToEntity)
+                .collect(Collectors.toList());
+            admission.setFeePayments(feePayments);
+        }
         return admission;
+    }
+
+    private FeePaymentDTO convertFeePaymentToDTO(FeePayment feePayment) {
+        FeePaymentDTO feePaymentDTO = new FeePaymentDTO();
+        feePaymentDTO.setId(feePayment.getId());
+        feePaymentDTO.setAdmissionId(feePayment.getAdmission() != null ? feePayment.getAdmission().getId() : null);
+        feePaymentDTO.setAmountCredited(feePayment.getAmountCredited());
+        feePaymentDTO.setBalanceAmount(feePayment.getBalanceAmount());
+        feePaymentDTO.setPaymentDate(feePayment.getPaymentDate());
+        feePaymentDTO.setPaymentMethod(feePayment.getPaymentMethod());
+        feePaymentDTO.setNextDueDate(feePayment.getNextDueDate());
+        return feePaymentDTO;
+    }
+
+    private FeePayment convertFeePaymentToEntity(FeePaymentDTO feePaymentDTO) {
+        FeePayment feePayment = new FeePayment();
+        feePayment.setAmountCredited(feePaymentDTO.getAmountCredited());
+        feePayment.setBalanceAmount(feePaymentDTO.getBalanceAmount());
+        feePayment.setPaymentDate(feePaymentDTO.getPaymentDate());
+        feePayment.setPaymentMethod(feePaymentDTO.getPaymentMethod());
+        feePayment.setNextDueDate(feePaymentDTO.getNextDueDate());
+        Admission admission = admissionRepository.findById(feePaymentDTO.getAdmissionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Admission not found with id: " + feePaymentDTO.getAdmissionId()));
+        feePayment.setAdmission(admission);
+        return feePayment;
     }
 }
