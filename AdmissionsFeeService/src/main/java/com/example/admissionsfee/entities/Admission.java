@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,8 +25,12 @@ public class Admission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long enquiryId;
+    
+    
+    private int courseTypeId;
+    private int subjectId;
+    private long userid;
+    private int enquiryId;
 
     @Temporal(TemporalType.DATE)
     private Date admissionDate;
@@ -34,8 +39,6 @@ public class Admission {
 
     private String status;
     
-    // One-to-many relationship to FeePayment
-    @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeePayment> feePayments;
-
 }
