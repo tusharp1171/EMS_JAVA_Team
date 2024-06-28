@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.facultytimetable.customexception.weekdays.DataNotFoundException;
+import com.example.facultytimetable.dto.SyallbusDto;
 import com.example.facultytimetable.model.TimeTable;
 import com.example.facultytimetable.service.TimeTableService;
 
@@ -46,6 +47,17 @@ public class TimeTableController {
         } catch (DataNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(createResponse("TimeTable not found", HttpStatus.NOT_FOUND));
+        }
+    }
+    
+    @PostMapping("/syallbus")
+    public ResponseEntity<?> saveTimeTableWithSyallbus(@RequestBody SyallbusDto syallbusObj) {
+        try {
+            TimeTable createdTimeTable = timeTableService.createTimeTableWithSyallbus(syallbusObj);
+            return ResponseEntity.ok(createdTimeTable); // Return the saved TimeTable object
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to create TimeTable");
         }
     }
 

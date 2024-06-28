@@ -8,5 +8,5 @@ import lombok.Data;
 @Service
 public class UserMicroserviceApi {
 
-	private final String userUrl = "http://192.168.1.106:8080/api/test/tokenusername";
+	private final String userUrl = "http://192.168.1.135:8080/api/test/tokenusername";
 }

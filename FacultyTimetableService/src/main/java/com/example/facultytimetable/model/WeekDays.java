@@ -15,7 +15,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "week_days",uniqueConstraints = @UniqueConstraint(columnNames = { "weekDayName" }))
+@Table(name = "week_days")
 public class WeekDays {
 
     @Id
@@ -28,4 +28,7 @@ public class WeekDays {
     @JsonManagedReference
     @OneToOne(mappedBy = "weekDay", cascade = CascadeType.ALL, orphanRemoval = true)
     private TimeTable timeTable;
+    
+    
+   
 }
