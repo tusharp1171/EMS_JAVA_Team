@@ -21,7 +21,7 @@ public class UserType {
     @NotBlank(message = "userTypeName is a required field")
     @Size(min = 2, message = "userTypeName must be at least 2 characters")
     private String userTypeName;
-
+  
     private String userTypeDescription;
     
     
