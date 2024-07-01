@@ -71,14 +71,17 @@ public class EnquiriesController {
 					HttpStatus.BAD_REQUEST.value());
 			return ResponseEntity.badRequest().body(errorDetails);
 		}
-
+		 long response =
+				 restTemplate.getForObject("http://192.168.1.110:8080/api/test/tokenusername",
+				 long.class);
+			enquiry.setSalesPersonid(response);
 		Enquiries savedEnquiry = enquiriesService.saveEnquiry(enquiry, id, pipeLinePhaseId);
-		// long response =
-		// restTemplate.getForObject("http://192.168.1.113:8080/api/test/tokenusername",
-		// long.class);
+		
+		 
+		 
 
-	restTemplate.postForObject("http://192.168.1.126:8084/api/communication-logs/enquiry", savedEnquiry,
-				Enquiries.class);
+//	restTemplate.postForObject("http://192.168.1.116:8084/api/communication-logs/enquiry", savedEnquiry,
+//				Enquiries.class);
 
 		return ResponseEntity.ok(savedEnquiry);
 	}

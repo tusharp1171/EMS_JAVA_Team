@@ -48,8 +48,13 @@ public class Enquiries {
     @JoinColumn(name = "pipeLinePhaseId", nullable = false)
     private PipeLinePhases pipeLinePhases;
 
+    private long salesPersonid;
+    
+    
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate; // Add this field for created date
+    
+    
 
     // Getters and setters
     public Integer getEnquiryId() {
@@ -119,4 +124,12 @@ public class Enquiries {
     protected void onCreate() {
         createdDate = LocalDateTime.now(); // or use your preferred method to set the date
     }
+
+	public long getSalesPersonid() {
+		return salesPersonid;
+	}
+
+	public void setSalesPersonid(long salesPersonid) {
+		this.salesPersonid = salesPersonid;
+	}
 }
