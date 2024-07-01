@@ -20,7 +20,6 @@ public class AdmissionDTO {
     private long userid;
 	
     private int enquiryId;
-    private Date admissionDate;
     private String description;
     private String status;
     
