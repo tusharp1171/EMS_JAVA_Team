@@ -60,7 +60,7 @@ public class SyllabusController {
        sy.setSyallbusId(syid);
        
        
-       restTemplate.postForEntity("http://192.168.1.131:8087/api/timetable/syallbus", sy, SyallbussubjectidDto.class);       
+      restTemplate.postForEntity("http://192.168.1.116:8087/api/timetable/syallbus", sy, SyallbussubjectidDto.class);       
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSyllabus);
     }
     @PutMapping("/{id}")

@@ -147,14 +147,14 @@ public class AuthController {
 
    if (signUpRequest.getUserAddressDto() != null) {
        restTemplate.postForEntity(
-                "http://192.168.1.144:8081/userAdresses/add",
+                "http://localhost:8081/userAdresses/add",
                 userAddressDto,
                 UserAddressDto.class);    
       
     }
     if (signUpRequest.getUserEducationDetails() != null) {
     restTemplate.postForEntity(
-                "http://192.168.1.144:8081/userEducationDetails/add",
+                "http://localhost:8081/userEducationDetails/add",
                 userEducationDetails,
                 UserEducationDetails.class);  
     }

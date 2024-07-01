@@ -44,7 +44,7 @@ public class UserController {
 		try {
 			// Get the user ID from an external service
 			ResponseEntity<Long> userIdResponse = restTemplate
-					.getForEntity("http://192.168.1.135" + ":8080/api/test/tokenusername", Long.class);
+					.getForEntity("http://localhost:8080/api/test/tokenusername", Long.class);
 			Long userId = userIdResponse.getBody();
 			if (userId == null) {
 				throw new ResourceNotFoundException("User ID not found");
@@ -73,10 +73,10 @@ public class UserController {
 			// enquiryDto.getPipeLinePhaseId() == pipelineId) {
 
 			// Send the EnquiryDto to the external service
-			restTemplate.postForEntity("http://192.168.1.124:8083/enquiries/add/" + pid + "/" + cid, enquiryDto,
+			restTemplate.postForEntity("http://192.168.1.105:8083/enquiries/add/" + pid + "/" + cid, enquiryDto,
 					EnquiryDto.class);
 			// Send the ActivityDto to the external service
-			restTemplate.postForEntity("http://192.168.1.134:8082/api/activities/createActivity", activityDto,
+			restTemplate.postForEntity("http://192.168.1.116:8082/api/activities/createActivity", activityDto,
 					Activitydto.class);
 
 			return "Enquiry and activity added successfully";
