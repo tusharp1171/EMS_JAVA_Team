@@ -32,7 +32,7 @@ public class Admission {
     private long userid;
     private int enquiryId;
 
-    @Temporal(TemporalType.DATE)
+
     private Date admissionDate;
 
     private String description;

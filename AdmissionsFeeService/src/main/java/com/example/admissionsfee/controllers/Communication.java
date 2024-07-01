@@ -54,11 +54,11 @@ public class Communication {
             
             
             Integer enquiryId = restTemplate.getForObject(
-                    "http://192.168.1.131:8084/api/communication-logs/enquiryId", Integer.class);
+                    "http://192.168.1.116:8084/api/communication-logs/enquiryId", Integer.class);
             System.out.println(enquiryId);
             
             ResponseEntity<Long> userIdResponse = restTemplate.getForEntity(
-                "http://192.168.1.135:8080/api/test/tokenusername", Long.class);
+                "http://localhost:8080/api/test/tokenusername", Long.class);
         Long userId = userIdResponse.getBody();
         System.out.println(userId);           
 
@@ -68,7 +68,7 @@ public class Communication {
             admission.setSubjectId(subjectId);
             admission.setEnquiryId(enquiryId);
             admission.setUserid(userId);
-            admission.setAdmissionDate(admissionDTO.getAdmissionDate());
+            admission.setAdmissionDate(new Date());
             admission.setDescription(admissionDTO.getDescription());
             admission.setStatus(admissionDTO.getStatus());
 
@@ -103,7 +103,7 @@ public class Communication {
 
           // Retrieve the syllabus details
             restTemplate.exchange(
-                  "http://192.168.1.135:8085/api/syllabuses", HttpMethod.POST, requestEntity, SyllabusDTO.class);
+                  "http://localhost:8085/api/syllabuses", HttpMethod.POST, requestEntity, SyllabusDTO.class);
 
             
 
@@ -145,5 +145,8 @@ public class Communication {
         // Return the response
         return ResponseEntity.ok(admissions);
     }
+    
+    
+    
     
 }
