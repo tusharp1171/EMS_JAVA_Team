@@ -1,5 +1,6 @@
 package com.example.admissionsfee.serviceImpl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,34 +38,61 @@ public class AdmissionServiceImpl implements AdmissionService {
         return convertToDTO(admission);
     }
 
+//    @Override
+//    public AdmissionDTO createAdmission(AdmissionDTO admissionDTO) {
+//        Admission admission = convertToEntity(admissionDTO);
+//       
+//        admission.setAdmissionDate(new Date());
+//
+//        // Save admission first to generate the ID
+//        System.out.println(admission.getAdmissionDate());
+//        Admission savedAdmission = admissionRepository.save(admission);
+//
+//        // Now create and save FeePayments if they exist
+//        List<FeePaymentDTO> feesdto = admissionDTO.getFeePayments();
+//        if (feesdto != null) {
+//            for (FeePaymentDTO feeDTO : feesdto) {
+//                FeePayment feePayment = new FeePayment();
+//                feePayment.setAmountCredited(feeDTO.getAmountCredited());
+//                feePayment.setBalanceAmount(feeDTO.getBalanceAmount());
+//                feePayment.setPaymentDate(feeDTO.getPaymentDate());
+//                feePayment.setPaymentMethod(feeDTO.getPaymentMethod());
+//                feePayment.setNextDueDate(feeDTO.getNextDueDate());
+//
+//                // Set the saved Admission to the FeePayment
+//                feePayment.setAdmission(savedAdmission);
+//
+//                // Save the FeePayment
+//                feePaymentRepository.save(feePayment);
+//            }
+//        }
+//
+//        return convertToDTO(savedAdmission);
+//    }
+    
+    
     @Override
-    public AdmissionDTO createAdmission(AdmissionDTO admissionDTO) {
-        Admission admission = convertToEntity(admissionDTO);
-        
+    public Admission createAdmission(Admission admission) {
+        // Set the current date as the admission date
+        admission.setAdmissionDate(new Date());
+
         // Save admission first to generate the ID
+        System.out.println(admission.getAdmissionDate());
         Admission savedAdmission = admissionRepository.save(admission);
-        
+
         // Now create and save FeePayments if they exist
-        List<FeePaymentDTO> feesdto = admissionDTO.getFeePayments();
-        if (feesdto != null) {
-            for (FeePaymentDTO feeDTO : feesdto) {
-            	
-                FeePayment feePayment = new FeePayment();
-                feePayment.setAmountCredited(feeDTO.getAmountCredited());
-                feePayment.setBalanceAmount(feeDTO.getBalanceAmount());
-                feePayment.setPaymentDate(feeDTO.getPaymentDate());
-                feePayment.setPaymentMethod(feeDTO.getPaymentMethod());
-                feePayment.setNextDueDate(feeDTO.getNextDueDate());
-                
+        List<FeePayment> feePayments = admission.getFeePayments();
+        if (feePayments != null) {
+            for (FeePayment feePayment : feePayments) {
                 // Set the saved Admission to the FeePayment
                 feePayment.setAdmission(savedAdmission);
-                
+
                 // Save the FeePayment
                 feePaymentRepository.save(feePayment);
             }
         }
-        
-        return convertToDTO(savedAdmission);
+
+        return savedAdmission;
     }
 
     @Override
@@ -73,7 +101,6 @@ public class AdmissionServiceImpl implements AdmissionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Admission not found with id: " + id));
 
         admission.setEnquiryId(admissionDTO.getEnquiryId());
-        admission.setAdmissionDate(admissionDTO.getAdmissionDate());
         admission.setDescription(admissionDTO.getDescription());
         admission.setStatus(admissionDTO.getStatus());
 
@@ -94,7 +121,6 @@ public class AdmissionServiceImpl implements AdmissionService {
         AdmissionDTO admissionDTO = new AdmissionDTO();
         admissionDTO.setId(admission.getId());
         admissionDTO.setEnquiryId(admission.getEnquiryId());
-        admissionDTO.setAdmissionDate(admission.getAdmissionDate());
         admissionDTO.setDescription(admission.getDescription());
         admissionDTO.setStatus(admission.getStatus());
         // Convert FeePayments to FeePaymentDTOs
@@ -110,7 +136,6 @@ public class AdmissionServiceImpl implements AdmissionService {
     private Admission convertToEntity(AdmissionDTO admissionDTO) {
         Admission admission = new Admission();
         admission.setEnquiryId(admissionDTO.getEnquiryId());
-        admission.setAdmissionDate(admissionDTO.getAdmissionDate());
         admission.setDescription(admissionDTO.getDescription());
         admission.setStatus(admissionDTO.getStatus());
         // Convert FeePaymentDTOs to FeePayments
@@ -146,5 +171,14 @@ public class AdmissionServiceImpl implements AdmissionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Admission not found with id: " + feePaymentDTO.getAdmissionId()));
         feePayment.setAdmission(admission);
         return feePayment;
+    }
+    
+    @Override
+    public List<Admission> getAdmissionsByDate(Date date) {
+        return admissionRepository.findAdmissionsByDate(date);
+    }
+    @Override
+    public List<Admission> getAdmissionsBetweenDates(Date startDate, Date endDate) {
+        return admissionRepository.findAdmissionsBetweenDates(startDate, endDate);
     }
 }
