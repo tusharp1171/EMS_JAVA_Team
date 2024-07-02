@@ -93,10 +93,10 @@ public class TimeTableServiceImpl implements TimeTableService {
 		TimeTable saveTimeTable = new TimeTable();
 
 		// Fetch faulty ID from the external API
-		ResponseEntity<Integer> faultyIdResponse = this.restTemplate.getForEntity(this.faultyIdApi.getFaultyIdUrl(),
-				Integer.class);
-		Integer faultyId = faultyIdResponse.getBody();
-
+		//ResponseEntity<Integer> faultyIdResponse = this.restTemplate.getForEntity(this.faultyIdApi.getFaultyIdUrl(),Integer.class);
+		//Integer faultyId = faultyIdResponse.getBody();
+		
+		Integer faultyId = 191;
 		// Set properties for the TimeTable object
 		saveTimeTable.setFaultyId(faultyId);
 		saveTimeTable.setSyllabusId(syallbusObj.getSyallbusId());
@@ -105,9 +105,12 @@ public class TimeTableServiceImpl implements TimeTableService {
 
 		// Get the weekday for the subject ID
 		String weekdayName = getWeekdayNameForSubjectId(syallbusObj.getSubjectId());
-
+	
+		
+		
 		// Find or create the WeekDays object if necessary
-		WeekDays weekDay = getOrCreateWeekDay(weekdayName);
+		WeekDays weekDay = weekDaysRepository.findByWeekDayName(weekdayName).orElse(new WeekDays(weekdayName));
+		
 
 		// Set the WeekDays object to the TimeTable
 		saveTimeTable.setWeekDay(weekDay);

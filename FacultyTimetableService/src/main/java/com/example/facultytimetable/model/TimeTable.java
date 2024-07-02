@@ -2,7 +2,7 @@ package com.example.facultytimetable.model;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -19,16 +19,16 @@ import lombok.Data;
 @Table(name = "time_table")
 public class TimeTable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer timeTableId;
-    private Integer faultyId;
-    private Integer syllabusId;
-    private LocalDateTime slotStartTime;
-    private LocalDateTime slotEndTime;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer timeTableId;
+	private Integer faultyId;
+	private Integer syllabusId;
+	private LocalDateTime slotStartTime;
+	private LocalDateTime slotEndTime;
 
-    @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "week_day_id", referencedColumnName = "weekDayId")
-    private WeekDays weekDay;
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "week_day_id", referencedColumnName = "weekDayId")
+	private WeekDays weekDay;
 }
